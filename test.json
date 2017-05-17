@@ -1,0 +1,57 @@
+[
+  {
+    "upperLeft": {
+      "x": 83.0,
+      "y": 100.0
+    },
+    "size": 115.0,
+    "color": {
+      "value": -1,
+      "falpha": 0.0
+    },
+    "SHAPE_TYPE": "cs355.model.drawing.Square"
+  },
+  {
+    "center": {
+      "x": 236.0,
+      "y": 177.0
+    },
+    "width": 104.0,
+    "height": 155.0,
+    "color": {
+      "value": -1,
+      "falpha": 0.0
+    },
+    "SHAPE_TYPE": "cs355.model.drawing.Ellipse"
+  },
+  {
+    "start": {
+      "x": 54.0,
+      "y": 248.0
+    },
+    "end": {
+      "x": 121.0,
+      "y": 311.0
+    },
+    "color": {
+      "value": -1,
+      "falpha": 0.0
+    },
+    "SHAPE_TYPE": "cs355.model.drawing.Line"
+  },
+  {
+    "start": {
+      "x": 121.0,
+      "y": 311.0
+    },
+    "end": {
+      "x": 211.0,
+      "y": 409.0
+    },
+    "color": {
+      "value": -1,
+      "falpha": 0.0
+    },
+    "SHAPE_TYPE": "cs355.model.drawing.Line"
+  }
+]
