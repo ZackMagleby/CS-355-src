@@ -240,45 +240,70 @@ public class Controller implements CS355Controller {
 	public void lineButtonHit() {
 		GUIFunctions.printf("");
 		curState = State.LINE;
+		curShape = null;
+		curShapeIndex = -1;
+		model.setShapeIndex(-1);
+		model.updateAll();
 	}
 
 	@Override
 	public void squareButtonHit() {
 		GUIFunctions.printf("");
 		curState = State.SQUARE;
-		// TODO Auto-generated method stub
-
+		curShape = null;
+		curShapeIndex = -1;
+		model.setShapeIndex(-1);
+		model.updateAll();
 	}
 
 	@Override
 	public void rectangleButtonHit() {
 		GUIFunctions.printf("");
 		curState = State.RECTANGLE;
+		curShape = null;
+		curShapeIndex = -1;
+		model.setShapeIndex(-1);
+		model.updateAll();
 	}
 
 	@Override
 	public void circleButtonHit() {
 		GUIFunctions.printf("");
 		curState = State.CIRCLE;
+		curShape = null;
+		curShapeIndex = -1;
+		model.setShapeIndex(-1);
+		model.updateAll();
 	}
 
 	@Override
 	public void ellipseButtonHit() {
 		GUIFunctions.printf("");
 		curState = State.ELLIPSE;
+		curShape = null;
+		curShapeIndex = -1;
+		model.setShapeIndex(-1);
+		model.updateAll();
 	}
 
 	@Override
 	public void triangleButtonHit() {
 		curState = State.TRIANGLE1;
 		GUIFunctions.printf("CLICK FIRST POINT");
+		curShape = null;
+		curShapeIndex = -1;
+		model.setShapeIndex(-1);
+		model.updateAll();
 
 	}
 
 	@Override
 	public void selectButtonHit() {
 		curState = State.SELECT;
-
+		curShape = null;
+		curShapeIndex = -1;
+		model.setShapeIndex(-1);
+		model.updateAll();
 	}
 
 	@Override
