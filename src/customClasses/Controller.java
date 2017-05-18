@@ -229,6 +229,10 @@ public class Controller implements CS355Controller {
 	public void colorButtonHit(Color c) {
 		controllorColor = c;
 		GUIFunctions.changeSelectedColor(c);
+		if(curShape != null){
+			curShape.setColor(c);
+			model.updateAll();
+		}
 		// TODO Auto-generated method stub
 	}
 
