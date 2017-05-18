@@ -1,7 +1,6 @@
 package cs355.solution;
 
 import cs355.GUIFunctions;
-import cs355.controller.CS355Controller;
 import customClasses.Controller;
 import customClasses.Model;
 import customClasses.View;

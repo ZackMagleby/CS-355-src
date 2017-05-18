@@ -1,6 +1,6 @@
 package customClasses;
 
-import java.util.Collection;
+import java.awt.geom.Point2D.Double;
 import java.util.Collections;
 import java.util.List;
 import java.util.Observer;
@@ -13,10 +13,12 @@ public class Model extends CS355Drawing{
 
 	Vector<Shape> shapeList;
 	Vector<Observer> observers;
+	int curShapeIndex;
 	
 	public Model() {
 		shapeList = new Vector<Shape>();
 		observers = new Vector<Observer>();
+		curShapeIndex = -1;
 	}
 	
 	@Override
@@ -41,31 +43,35 @@ public class Model extends CS355Drawing{
 	public void moveToFront(int index) {
 		Shape shape = shapeList.elementAt(index);
 		shapeList.remove(index);
-		shapeList.add(0, shape);
+		shapeList.add(shape);
 	}
 
 	@Override
 	public void movetoBack(int index) {
 		Shape shape = shapeList.elementAt(index);
 		shapeList.remove(index);
-		shapeList.add(shape);
-	}
-
-	@Override
-	public void moveForward(int index) {
-		if(shapeList.size() > 2 && index < shapeList.size()){
-			Shape shape = shapeList.get(index);
-			shapeList.set(index, shapeList.get(index-1));
-			shapeList.set(index-1, shape);			
-		}
+		shapeList.add(0, shape);
 	}
 
 	@Override
 	public void moveBackward(int index) {
+		if(shapeList.size() > 2 && index < shapeList.size()){
+			if(index > 0){
+				Shape shape = shapeList.get(index);
+				shapeList.set(index, shapeList.get(index-1));
+				shapeList.set(index-1, shape);						
+			}
+		}
+	}
+
+	@Override
+	public void moveForward(int index) {
 		if(shapeList.size()>2 && index < shapeList.size()){
-			Shape shape = shapeList.get(index);
-			shapeList.set(index, shapeList.get(index+1));
-			shapeList.set(index+1, shape);		
+			if(index < shapeList.size()){
+				Shape shape = shapeList.get(index);
+				shapeList.set(index, shapeList.get(index+1));
+				shapeList.set(index+1, shape);						
+			}
 		}
 	}
 
@@ -77,7 +83,7 @@ public class Model extends CS355Drawing{
 
 	@Override
 	public List<Shape> getShapesReversed() {
-		Vector<Shape> tempList = shapeList; 
+		Vector<Shape> tempList = (Vector<Shape>) shapeList.clone(); 
 		Collections.reverse(tempList);
 		return tempList;
 	}
@@ -98,4 +104,11 @@ public class Model extends CS355Drawing{
 		}
 	}
 
+	public void setShapeIndex(int index){
+		curShapeIndex = index;
+	}
+	
+	public int getShapeIndex(){
+		return curShapeIndex;
+	}
 }

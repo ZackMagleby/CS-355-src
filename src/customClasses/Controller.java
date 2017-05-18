@@ -3,13 +3,8 @@ package customClasses;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.nio.DoubleBuffer;
 import java.util.Iterator;
 import java.util.List;
-
-import com.sun.javafx.geom.Point2D;
-import com.sun.javafx.scene.paint.GradientUtils.Point;
-import com.sun.management.VMOption.Origin;
 
 import cs355.GUIFunctions;
 import cs355.controller.CS355Controller;
@@ -20,7 +15,6 @@ import cs355.model.drawing.Rectangle;
 import cs355.model.drawing.Shape;
 import cs355.model.drawing.Square;
 import cs355.model.drawing.Triangle;
-import sun.security.util.DisabledAlgorithmConstraints;
 
 public class Controller implements CS355Controller {
 
@@ -36,11 +30,13 @@ public class Controller implements CS355Controller {
 	
 	Shape curShape;
 	boolean shapeSelected;
+	int curShapeIndex;
 	
 	public Controller(Model uploadModel){
 		controllorColor = Color.WHITE;
 		model = uploadModel;
 		shapeSelected = false;
+		curShapeIndex = -1;
 	}
 	
 	@Override
@@ -48,14 +44,12 @@ public class Controller implements CS355Controller {
 		if(curState == State.TRIANGLE1){
 			firstPoint = e.getPoint();
 			curState = State.TRIANGLE2;
-			//GUIFunctions.printf(origin.toString());
-			GUIFunctions.printf("CLICK SECOND POINT", null);
+			GUIFunctions.printf("CLICK SECOND POINT");
 		}
 		else if(curState == State.TRIANGLE2){
 			secondPoint = e.getPoint();
 			curState = State.TRIANGLE3;
-			//GUIFunctions.printf(secondPoint.toString());
-			GUIFunctions.printf("CLICK THIRD POINT", null);
+			GUIFunctions.printf("CLICK THIRD POINT");
 		}
 		else if(curState == State.TRIANGLE3){
 			thirdPoint = e.getPoint();
@@ -72,7 +66,7 @@ public class Controller implements CS355Controller {
 			model.addShape(tri);
 			model.updateAll();
 			curState = State.TRIANGLE1;
-			GUIFunctions.printf("CLICK FIRST POINT", null);
+			GUIFunctions.printf("CLICK FIRST POINT");
 		}
 
 	}
@@ -152,7 +146,6 @@ public class Controller implements CS355Controller {
 			
 			double upperLeftX = Math.min(origin.getX(), secondPoint.getX());
 			double upperLeftY = Math.min(origin.getY(), secondPoint.getY());
-//			java.awt.geom.Point2D.Double newUL = new java.awt.geom.Point2D.Double(upperLeftX, upperLeftY);
 			
 			double midX = upperLeftX + (newRect.getWidth()/2);
 			double midY = upperLeftY + (newRect.getHeight()/2);
@@ -215,6 +208,14 @@ public class Controller implements CS355Controller {
 			circle.setCenter(newUL);
 
 			model.updateAll();
+		}
+		else if(curState == State.SELECT){
+			if(curShape != null){
+				secondPoint = e.getPoint();
+				java.awt.geom.Point2D.Double drag = new java.awt.geom.Point2D.Double(origin.getX() - secondPoint.getX(), origin.getY()-secondPoint.getY());
+				curShape.setTranslation(drag);
+				model.updateAll();				
+			}
 		}
 	}
 
@@ -350,7 +351,10 @@ public class Controller implements CS355Controller {
 
 	@Override
 	public void doDeleteShape() {
-		// TODO Auto-generated method stub
+		if(curShape != null){
+			model.deleteShape(curShapeIndex);
+			model.updateAll();
+		}
 
 	}
 
@@ -398,26 +402,38 @@ public class Controller implements CS355Controller {
 
 	@Override
 	public void doMoveForward() {
-		// TODO Auto-generated method stub
-
+		if(curShapeIndex < model.getShapes().size()){
+			model.moveForward(curShapeIndex);
+			curShapeIndex++;
+			model.setShapeIndex(curShapeIndex);
+			model.updateAll();			
+		}
 	}
 
 	@Override
 	public void doMoveBackward() {
-		// TODO Auto-generated method stub
-
+		if(curShapeIndex > 0){
+			model.moveBackward(curShapeIndex);
+			curShapeIndex--;
+			model.setShapeIndex(curShapeIndex);
+			model.updateAll();			
+		}
 	}
 
 	@Override
 	public void doSendToFront() {
-		// TODO Auto-generated method stub
-
+		model.moveToFront(curShapeIndex);
+		curShapeIndex = model.getShapes().size();
+		model.setShapeIndex(curShapeIndex);
+		model.updateAll();
 	}
 
 	@Override
 	public void doSendtoBack() {
-		// TODO Auto-generated method stub
-
+		model.movetoBack(curShapeIndex);
+		curShapeIndex = 0;
+		model.setShapeIndex(curShapeIndex);
+		model.updateAll();
 	}
 	
 	private Shape findSelectedShape(){
@@ -433,6 +449,8 @@ public class Controller implements CS355Controller {
 				double finalCompare = Math.pow(distX, 2) + Math.pow(distY, 2);
 				if(finalCompare <= Math.pow(circle.getRadius()/2, 2)){
 					returnShape = s;
+					curShapeIndex = stackedShapes.size() -1 - i;
+					model.setShapeIndex(curShapeIndex);
 					GUIFunctions.printf("CIRCLE SELECTED");
 					shapeSelected = true;
 					break;
@@ -445,6 +463,8 @@ public class Controller implements CS355Controller {
 				boolean vertCheck = (click.getY() > UL.getY()) && (click.getY() < (UL.getY() + square.getSize()));
 				if(horizCheck && vertCheck){
 					returnShape = s;
+					curShapeIndex = stackedShapes.size() -1 - i;
+					model.setShapeIndex(curShapeIndex);
 					GUIFunctions.printf("SQUARE SELECTED");
 					shapeSelected = true;
 					break;
@@ -461,6 +481,8 @@ public class Controller implements CS355Controller {
 				double finalCompare = Math.pow(checkX, 2) + Math.pow(checkY, 2);
 				if(finalCompare <= 1){
 					returnShape = s;
+					curShapeIndex = stackedShapes.size() -1 - i;
+					model.setShapeIndex(curShapeIndex);
 					GUIFunctions.printf("ELLIPSE SELECTED");
 					shapeSelected = true;
 					break;
@@ -473,6 +495,8 @@ public class Controller implements CS355Controller {
 				boolean vertCheck = (click.getY() > UL.getY()) && (click.getY() < (UL.getY() + rect.getHeight()));
 				if(horizCheck && vertCheck){
 					returnShape = s;
+					curShapeIndex = stackedShapes.size() -1 - i;
+					model.setShapeIndex(curShapeIndex);
 					GUIFunctions.printf("RECTANGLE SELECTED");
 					shapeSelected = true;
 					break;
@@ -487,9 +511,13 @@ public class Controller implements CS355Controller {
 				double squared = Math.pow(denominator.getX(), 2) + Math.pow(denominator.getY(), 2);
 				double root = Math.sqrt(squared);
 				java.awt.geom.Point2D.Double n = new java.awt.geom.Point2D.Double(numerator.getX()/root, numerator.getY()/root);
-				double solution = (click.getX() * n.getX()) + (click.getY() * n.getY());
-				if(solution <= 4){
+				double distance = (click.getX() * n.getX()) + (click.getY() * n.getY());
+				distance = Math.abs(distance);
+				
+				if(distance <= 4){
 					returnShape = s;
+					curShapeIndex = stackedShapes.size() -1 - i;
+					model.setShapeIndex(curShapeIndex);
 					GUIFunctions.printf("LINE SELECTED");
 					shapeSelected = true;
 					break;
@@ -516,6 +544,8 @@ public class Controller implements CS355Controller {
 				
 				if(check1 > 0 && check2 > 0 && check3 > 0){
 					returnShape = s;
+					curShapeIndex = stackedShapes.size() -1 - i;
+					model.setShapeIndex(curShapeIndex);
 					GUIFunctions.printf("TRIANGLE SELECTED");
 					shapeSelected = true;
 					break;
@@ -524,8 +554,12 @@ public class Controller implements CS355Controller {
 		}
 		if(returnShape == null){
 			shapeSelected = false;
+			curShapeIndex = -1;
+			model.setShapeIndex(curShapeIndex);
+			curShape = null;
 			GUIFunctions.printf("NO SHAPE SELECTED");
 		}
+		model.updateAll();
 		return returnShape;
 	}
 
