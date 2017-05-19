@@ -34,7 +34,7 @@ public class View implements ViewRefresher {
 			if(shape instanceof Line){
 				Line line = (Line)shape; 
 				AffineTransform objToWorld = new AffineTransform();
-				objToWorld.translate(-line.getTranslation().getX(), -line.getTranslation().getY());
+				objToWorld.translate(line.getCenter().getX(), line.getCenter().getY());
 				//rotate
 				g2d.setTransform(objToWorld);
 				g2d.setColor(line.getColor());
@@ -47,11 +47,11 @@ public class View implements ViewRefresher {
 			else if(shape instanceof Ellipse){
 				Ellipse ellipse = (Ellipse) shape;
 				AffineTransform objToWorld = new AffineTransform();
-				objToWorld.translate(-ellipse.getTranslation().getX(), -ellipse.getTranslation().getY());
+				objToWorld.translate(ellipse.getCenter().getX(), ellipse.getCenter().getY());
 				//rotate
 				g2d.setTransform(objToWorld);
 				g2d.setColor(ellipse.getColor());
-				g2d.fillOval((int)ellipse.getCenter().getX(), (int)ellipse.getCenter().getY(), (int)ellipse.getWidth(), (int)ellipse.getHeight());
+				g2d.fillOval(0, 0, (int)ellipse.getWidth(), (int)ellipse.getHeight());
 				if(curSelect){
 					curShape = shape;
 					outlineType = "ELLIPSE";
@@ -60,11 +60,11 @@ public class View implements ViewRefresher {
 			else if(shape instanceof Circle){
 				Circle circle = (Circle) shape;
 				AffineTransform objToWorld = new AffineTransform();
-				objToWorld.translate(-circle.getTranslation().getX(), -circle.getTranslation().getY());
+				objToWorld.translate(circle.getCenter().getX(), circle.getCenter().getY());
 				//rotate
 				g2d.setTransform(objToWorld);
 				g2d.setColor(circle.getColor());
-				g2d.fillOval((int)circle.getCenter().getX(), (int)circle.getCenter().getY(), (int)circle.getRadius(), (int)circle.getRadius());
+				g2d.fillOval(0, 0, (int)circle.getRadius(), (int)circle.getRadius());
 				if(curSelect){
 					curShape = shape;
 					outlineType = "CIRCLE";
@@ -72,11 +72,11 @@ public class View implements ViewRefresher {
 			}
 			else if(shape instanceof Rectangle){
 				Rectangle rect = (Rectangle) shape;
-				java.awt.geom.Point2D.Double UL = new java.awt.geom.Point2D.Double(rect.getCenter().getX()-(rect.getWidth()/2), rect.getCenter().getY()-(rect.getHeight()/2));
+				java.awt.geom.Point2D.Double UL = new java.awt.geom.Point2D.Double(0-(rect.getWidth()/2), 0-(rect.getHeight()/2));
 				int[] xPoints = {(int)UL.getX(), (int)(UL.getX() + rect.getWidth()), (int)(UL.getX() + rect.getWidth()), (int)UL.getX()};
 				int[] yPoints = {(int)UL.getY(), (int)UL.getY(), (int)(UL.getY() + rect.getHeight()), (int)(UL.getY() + rect.getHeight())};
 				AffineTransform objToWorld = new AffineTransform();
-				objToWorld.translate(-rect.getTranslation().getX(), -rect.getTranslation().getY());
+				objToWorld.translate(rect.getCenter().getX(), rect.getCenter().getY());
 				//rotate
 				g2d.setTransform(objToWorld);
 				g2d.setColor(rect.getColor());
@@ -88,11 +88,11 @@ public class View implements ViewRefresher {
 			}
 			else if(shape instanceof Square){
 				Square square = (Square)shape;
-				java.awt.geom.Point2D.Double UL = new java.awt.geom.Point2D.Double(square.getCenter().getX()-(square.getSize()/2), square.getCenter().getY()-(square.getSize()/2));
+				java.awt.geom.Point2D.Double UL = new java.awt.geom.Point2D.Double(0-(square.getSize()/2), 0-(square.getSize()/2));
 				int[] xPoints = {(int)UL.getX(), (int)(UL.getX() + square.getSize()),(int)(UL.getX() + square.getSize()), (int)UL.getX()};
 				int[] yPoints = {(int)UL.getY(), (int)UL.getY(), (int)(UL.getY() + square.getSize()), (int)(UL.getY() + square.getSize())};
 				AffineTransform objToWorld = new AffineTransform();
-				objToWorld.translate(-square.getTranslation().getX(), -square.getTranslation().getY());
+				objToWorld.translate(square.getCenter().getX(), square.getCenter().getY());
 				//rotate
 				g2d.setTransform(objToWorld);
 				g2d.setColor(square.getColor());
@@ -104,11 +104,10 @@ public class View implements ViewRefresher {
 			}
 			else if(shape instanceof Triangle){
 				Triangle tri = (Triangle) shape;
-				java.awt.geom.Point2D.Double center = tri.getCenter();
-				int[] xPoints = {(int)(tri.getA().getX() + center.getX()), (int)(tri.getB().getX() + center.getX()), (int)(tri.getC().getX() + center.getX())};
-				int[] yPoints = {(int)(tri.getA().getY() + center.getY()), (int)(tri.getB().getY() + center.getY()), (int)(tri.getC().getY() + center.getY())};
+				int[] xPoints = {(int)(tri.getA().getX()), (int)(tri.getB().getX()), (int)(tri.getC().getX())};
+				int[] yPoints = {(int)(tri.getA().getY()), (int)(tri.getB().getY()), (int)(tri.getC().getY())};
 				AffineTransform objToWorld = new AffineTransform();
-				objToWorld.translate(-tri.getTranslation().getX(), -tri.getTranslation().getY());
+				objToWorld.translate(tri.getCenter().getX(), tri.getCenter().getY());
 				//rotate
 				g2d.setTransform(objToWorld);
 				g2d.setColor(tri.getColor());
@@ -127,48 +126,68 @@ public class View implements ViewRefresher {
 			}
 			g2d.setColor(curColor);
 			AffineTransform objToWorld = new AffineTransform();
-			objToWorld.translate(-curShape.getTranslation().getX(), -curShape.getTranslation().getY());
+			objToWorld.translate(curShape.getCenter().getX(), curShape.getCenter().getY());
 			//rotate
 			g2d.setTransform(objToWorld);
 			switch(outlineType){
 				case "LINE":
+					Line line = (Line)curShape; 
+					java.awt.geom.Point2D.Double start = line.getStart();
+					java.awt.geom.Point2D.Double end = line.getEnd();
+					g2d.drawRect((int)start.getX()-4, (int)start.getY()-4, 8, 8);
+					g2d.drawRect((int)end.getX()-4, (int)end.getY()-4, 8, 8);
 					break;
 				case "SQUARE":
 					Square square = (Square) curShape;
-					java.awt.geom.Point2D.Double UL = new java.awt.geom.Point2D.Double(square.getCenter().getX()-(square.getSize()/2), square.getCenter().getY()-(square.getSize()/2));
+					java.awt.geom.Point2D.Double UL = new java.awt.geom.Point2D.Double(0-(square.getSize()/2), 0-(square.getSize()/2));
 					g2d.drawLine((int)UL.getX(), (int)UL.getY(), (int)(UL.getX()+square.getSize()), (int)(UL.getY()));
 					g2d.drawLine((int)(UL.getX()+square.getSize()), (int)(UL.getY()), (int)(UL.getX()+square.getSize()), (int)(UL.getY()+square.getSize()));
 					g2d.drawLine((int)UL.getX(), (int)UL.getY(), (int)(UL.getX()), (int)(UL.getY()+square.getSize()));
 					g2d.drawLine((int)UL.getX(), (int)(UL.getY() + square.getSize()), (int)(UL.getX()+square.getSize()), (int)(UL.getY()+square.getSize()));
+					
+					g2d.drawRect((int)(UL.getX()+square.getSize()/2-4), (int)(UL.getY()-12), 8, 8);
+					
 					break;
 				case "RECT":
 					Rectangle rect = (Rectangle) curShape;
-					java.awt.geom.Point2D.Double upperLeft = new java.awt.geom.Point2D.Double(rect.getCenter().getX()-(rect.getWidth()/2), rect.getCenter().getY()-(rect.getHeight()/2));
+					java.awt.geom.Point2D.Double upperLeft = new java.awt.geom.Point2D.Double(0-(rect.getWidth()/2), 0-(rect.getHeight()/2));
 					g2d.drawLine((int)upperLeft.getX(), (int)upperLeft.getY(), (int)(upperLeft.getX()+rect.getWidth()), (int)(upperLeft.getY()));
 					g2d.drawLine((int)(upperLeft.getX()+rect.getWidth()), (int)(upperLeft.getY()), (int)(upperLeft.getX()+rect.getWidth()), (int)(upperLeft.getY()+rect.getHeight()));
 					g2d.drawLine((int)upperLeft.getX(), (int)upperLeft.getY(), (int)(upperLeft.getX()), (int)(upperLeft.getY()+rect.getHeight()));
 					g2d.drawLine((int)upperLeft.getX(), (int)(upperLeft.getY() + rect.getHeight()), (int)(upperLeft.getX()+rect.getWidth()), (int)(upperLeft.getY()+rect.getHeight()));
+					
+					g2d.drawRect((int)(upperLeft.getX()+rect.getWidth()/2-4), (int)(upperLeft.getY()-12), 8, 8);
+					
 					break;
 				case "CIRCLE":
 					Circle circle = (Circle) curShape;
-					g2d.drawLine((int)circle.getCenter().getX(), (int)circle.getCenter().getY(), (int)(circle.getCenter().getX()+circle.getRadius()), (int)(circle.getCenter().getY()));
-					g2d.drawLine((int)(circle.getCenter().getX()+circle.getRadius()), (int)(circle.getCenter().getY()), (int)(circle.getCenter().getX()+circle.getRadius()), (int)(circle.getCenter().getY()+circle.getRadius()));
-					g2d.drawLine((int)circle.getCenter().getX(), (int)circle.getCenter().getY(), (int)(circle.getCenter().getX()), (int)(circle.getCenter().getY()+circle.getRadius()));
-					g2d.drawLine((int)circle.getCenter().getX(), (int)(circle.getCenter().getY() + circle.getRadius()), (int)(circle.getCenter().getX()+circle.getRadius()), (int)(circle.getCenter().getY()+circle.getRadius()));
+					g2d.drawLine(0, (int)0, (int)(0+circle.getRadius()), (int)(0));
+					g2d.drawLine((int)(0 +circle.getRadius()), (int)(0), (int)(0+circle.getRadius()), (int)(0+circle.getRadius()));
+					g2d.drawLine(0, (int)0, (int)(0), (int)(0+circle.getRadius()));
+					g2d.drawLine(0, (int)(0 + circle.getRadius()), (int)(0+circle.getRadius()), (int)(0+circle.getRadius()));
+					
+					g2d.drawRect((int)(0+circle.getRadius()/2-4), (int)(0-12), 8, 8);
+					
 					break;
 				case "ELLIPSE":
 					Ellipse ellipse = (Ellipse) curShape;
-					g2d.drawLine((int)ellipse.getCenter().getX(), (int)ellipse.getCenter().getY(), (int)(ellipse.getCenter().getX()+ellipse.getWidth()), (int)(ellipse.getCenter().getY()));
-					g2d.drawLine((int)(ellipse.getCenter().getX()+ellipse.getWidth()), (int)(ellipse.getCenter().getY()), (int)(ellipse.getCenter().getX()+ellipse.getWidth()), (int)(ellipse.getCenter().getY()+ellipse.getHeight()));
-					g2d.drawLine((int)ellipse.getCenter().getX(), (int)ellipse.getCenter().getY(), (int)(ellipse.getCenter().getX()), (int)(ellipse.getCenter().getY()+ellipse.getHeight()));
-					g2d.drawLine((int)ellipse.getCenter().getX(), (int)(ellipse.getCenter().getY() + ellipse.getHeight()), (int)(ellipse.getCenter().getX()+ellipse.getWidth()), (int)(ellipse.getCenter().getY()+ellipse.getHeight()));
+					g2d.drawLine((int)0, (int)0, (int)(0+ellipse.getWidth()), (int)(0));
+					g2d.drawLine((int)(0+ellipse.getWidth()), (int)(0), (int)(0+ellipse.getWidth()), (int)(0+ellipse.getHeight()));
+					g2d.drawLine((int)0, (int)0, (int)(0), (int)(0+ellipse.getHeight()));
+					g2d.drawLine((int)0, (int)(0 + ellipse.getHeight()), (int)(0+ellipse.getWidth()), (int)(0+ellipse.getHeight()));
+					
+					g2d.drawRect((int)(0+ellipse.getWidth()/2-4), (int)(0-12), 8, 8);
+					
 					break;
 				case "TRI":
 					Triangle tri = (Triangle) curShape;
-					java.awt.geom.Point2D.Double center = tri.getCenter();
-					g2d.drawLine((int)(tri.getA().getX() + center.getX()), (int)(tri.getA().getY() + center.getY()), (int)(tri.getB().getX() + center.getX()), (int)(tri.getB().getY() + center.getY()));
-					g2d.drawLine((int)(tri.getB().getX() + center.getX()), (int)(tri.getB().getY() + center.getY()), (int)(tri.getC().getX() + center.getX()), (int)(tri.getC().getY() + center.getY()));
-					g2d.drawLine((int)(tri.getC().getX() + center.getX()), (int)(tri.getC().getY() + center.getY()), (int)(tri.getA().getX() + center.getX()), (int)(tri.getA().getY() + center.getY()));
+					g2d.drawLine((int)(tri.getA().getX() + 0), (int)(tri.getA().getY() + 0), (int)(tri.getB().getX() + 0), (int)(tri.getB().getY() + 0));
+					g2d.drawLine((int)(tri.getB().getX() + 0), (int)(tri.getB().getY() + 0), (int)(tri.getC().getX() + 0), (int)(tri.getC().getY() + 0));
+					g2d.drawLine((int)(tri.getC().getX() + 0), (int)(tri.getC().getY() + 0), (int)(tri.getA().getX() + 0), (int)(tri.getA().getY() + 0));
+					
+					double xValue = (Math.min(Math.min(tri.getA().getY(), tri.getB().getY()), tri.getC().getY()) + Math.max(Math.max(tri.getA().getY(), tri.getB().getY()), tri.getC().getY()))/2 -4;
+					double yValue = Math.min(Math.min(tri.getA().getY(), tri.getB().getY()), tri.getC().getY())-12;
+					g2d.drawRect((int)xValue, (int)yValue, 8, 8);
 					break;
 			}
 		}

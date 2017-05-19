@@ -3,6 +3,7 @@ package customClasses;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.time.Year;
 import java.util.Iterator;
 import java.util.List;
 
@@ -27,6 +28,7 @@ public class Controller implements CS355Controller {
 	java.awt.Point secondPoint;
 	java.awt.Point thirdPoint;
 	java.awt.Point click;
+	java.awt.geom.Point2D.Double relativePoint;
 	
 	Shape curShape;
 	boolean shapeSelected;
@@ -54,13 +56,51 @@ public class Controller implements CS355Controller {
 		else if(curState == State.TRIANGLE3){
 			thirdPoint = e.getPoint();
 			
-			double centerX = firstPoint.getX() + secondPoint.getX() + thirdPoint.getX();
-			double centerY = firstPoint.getY() + secondPoint.getY() + thirdPoint.getY();
+			double centerX = (firstPoint.getX() + secondPoint.getX() + thirdPoint.getX())/3;
+			double centerY = (firstPoint.getY() + secondPoint.getY() + thirdPoint.getY())/3;
 			java.awt.geom.Point2D.Double center = new java.awt.geom.Point2D.Double(centerX, centerY);
 			
 			java.awt.geom.Point2D.Double one = new java.awt.geom.Point2D.Double(firstPoint.getX() - centerX, firstPoint.getY() - centerY);
 			java.awt.geom.Point2D.Double two = new java.awt.geom.Point2D.Double(secondPoint.getX() - centerX, secondPoint.getY() - centerY);
 			java.awt.geom.Point2D.Double three = new java.awt.geom.Point2D.Double(thirdPoint.getX() - centerX, thirdPoint.getY() - centerY);
+			
+//			java.awt.geom.Point2D.Double a;
+//			java.awt.geom.Point2D.Double b;
+//			java.awt.geom.Point2D.Double c;
+//			
+//			if(Math.min(Math.min(one.getX(), two.getX()), three.getX()) == one.getX()){
+//				a = new java.awt.geom.Point2D.Double(one.getX(), one.getY());
+//				if(Math.min(two.getX(), three.getX())== two.getX()){
+//					b = new java.awt.geom.Point2D.Double(two.getX(), two.getY());
+//					c = new java.awt.geom.Point2D.Double(three.getX(), three.getY());
+//				}
+//				else{
+//					c = new java.awt.geom.Point2D.Double(two.getX(), two.getY());
+//					b = new java.awt.geom.Point2D.Double(three.getX(), three.getY());					
+//				}
+//			}
+//			else if(Math.min(Math.min(one.getX(), two.getX()), three.getX()) == two.getX()){
+//				a = new java.awt.geom.Point2D.Double(two.getX(), two.getY());
+//				if(Math.min(one.getX(), three.getX())== one.getX()){
+//					b = new java.awt.geom.Point2D.Double(one.getX(), one.getY());
+//					c = new java.awt.geom.Point2D.Double(three.getX(), three.getY());
+//				}
+//				else{
+//					c = new java.awt.geom.Point2D.Double(one.getX(), one.getY());
+//					b = new java.awt.geom.Point2D.Double(three.getX(), three.getY());					
+//				}				
+//			}
+//			else{
+//				a = new java.awt.geom.Point2D.Double(three.getX(), three.getY());
+//				if(Math.min(two.getX(), one.getX())== one.getX()){
+//					b = new java.awt.geom.Point2D.Double(one.getX(), one.getY());
+//					c = new java.awt.geom.Point2D.Double(two.getX(), two.getY());
+//				}
+//				else{
+//					c = new java.awt.geom.Point2D.Double(two.getX(), two.getY());
+//					b = new java.awt.geom.Point2D.Double(one.getX(), one.getY());					
+//				}				
+//			}
 
 			Triangle tri = new Triangle(controllorColor, center, one, two, three);
 			model.addShape(tri);
@@ -91,6 +131,9 @@ public class Controller implements CS355Controller {
 		if(curState == State.SELECT){
 			click = e.getPoint();
 			curShape = findSelectedShape();
+			if(curShape != null){
+				relativePoint = new java.awt.geom.Point2D.Double(curShape.getCenter().getX(), curShape.getCenter().getY());				
+			}
 			return;
 		}
 
@@ -131,9 +174,14 @@ public class Controller implements CS355Controller {
 	public void mouseDragged(MouseEvent e) {
 		if(curState == State.LINE){
 			secondPoint = e.getPoint();
+			java.awt.geom.Point2D.Double center = new java.awt.geom.Point2D.Double(secondPoint.getX() - origin.getX(), secondPoint.getY() - origin.getY());
 			Line newLine = (Line) model.getShape(model.getShapes().size()-1);
-			java.awt.geom.Point2D.Double end = new java.awt.geom.Point2D.Double(secondPoint.getX(), secondPoint.getY());
+			newLine.setCenter(center);
+			
+			java.awt.geom.Point2D.Double end = new java.awt.geom.Point2D.Double((secondPoint.getX() - center.getX()), (secondPoint.getY()-center.getY()));
 			newLine.setEnd(end);
+			java.awt.geom.Point2D.Double start = new java.awt.geom.Point2D.Double((origin.getX() - center.getX()), (origin.getY()-center.getY()));
+			newLine.setStart(start);
 			model.updateAll();
 		}
 		else if(curState == State.RECTANGLE){
@@ -212,8 +260,8 @@ public class Controller implements CS355Controller {
 		else if(curState == State.SELECT){
 			if(curShape != null){
 				secondPoint = e.getPoint();
-				java.awt.geom.Point2D.Double drag = new java.awt.geom.Point2D.Double(origin.getX() - secondPoint.getX(), origin.getY()-secondPoint.getY());
-				curShape.setTranslation(drag);
+				java.awt.geom.Point2D.Double drag = new java.awt.geom.Point2D.Double(relativePoint.getX() + (secondPoint.getX()-click.getX()), relativePoint.getY() + (secondPoint.getY()-click.getY()));
+				curShape.setCenter(drag);
 				model.updateAll();				
 			}
 		}
@@ -532,18 +580,34 @@ public class Controller implements CS355Controller {
 				}
 			}
 			else if(s instanceof Line){
+				//Slide 8 Parametric DIstance to Line
 				Line line = (Line) s;
-				java.awt.geom.Point2D.Double start = line.getStart();
-				java.awt.geom.Point2D.Double end = line.getEnd();
-				java.awt.geom.Point2D.Double numerator = new java.awt.geom.Point2D.Double((-1)*(end.getY() - start.getY()), end.getX() - start.getX());
-				java.awt.geom.Point2D.Double denominator = new java.awt.geom.Point2D.Double(end.getX()-start.getX(), end.getY() - start.getY());
-				double squared = Math.pow(denominator.getX(), 2) + Math.pow(denominator.getY(), 2);
-				double root = Math.sqrt(squared);
-				java.awt.geom.Point2D.Double n = new java.awt.geom.Point2D.Double(numerator.getX()/root, numerator.getY()/root);
-				double distance = (click.getX() * n.getX()) + (click.getY() * n.getY());
-				distance = Math.abs(distance);
+				java.awt.geom.Point2D.Double p0 = line.getStart();
+				java.awt.geom.Point2D.Double p1 = line.getEnd();
 				
-				if(distance <= 4){
+				p0 = new java.awt.geom.Point2D.Double(p0.getX()+line.getCenter().getX(), p0.getY()+line.getCenter().getY());
+				p1 = new java.awt.geom.Point2D.Double(p1.getX()+line.getCenter().getX(), p1.getY()+line.getCenter().getY());
+				
+				java.awt.geom.Point2D.Double numerator = new java.awt.geom.Point2D.Double((p1.getX() - p0.getX()), p1.getY() - p0.getY());
+				
+				//java.awt.geom.Point2D.Double denominator = new java.awt.geom.Point2D.Double(p1.getX()-p0.getX(), p1.getY() - p0.getY());
+				double squared = Math.pow((p1.getX()-p0.getX()), 2) + Math.pow((p1.getY() - p0.getY()), 2);
+				double root = Math.sqrt(squared);
+				
+				java.awt.geom.Point2D.Double d = new java.awt.geom.Point2D.Double(numerator.getX()/root, numerator.getY()/root);
+				
+				java.awt.geom.Point2D.Double minus = new java.awt.geom.Point2D.Double(click.getX() - p0.getX(), click.getY() - p0.getY());
+				double inside = (d.getX() * minus.getX()) + (minus.getY() * d.getY());
+				
+				java.awt.geom.Point2D.Double oneMore = new java.awt.geom.Point2D.Double(d.getX()*inside, d.getY()*inside);
+				java.awt.geom.Point2D.Double qPrime = new java.awt.geom.Point2D.Double(oneMore.getX()+p0.getX(), oneMore.getY()+p0.getY());
+				
+				double distance = Math.sqrt(Math.pow(click.getX() - qPrime.getX(), 2) + Math.pow(click.getY() - qPrime.getY(), 2));
+				
+				boolean horizCheck = (p0.getX() <= click.getX() && click.getX() <= p1.getX());
+				boolean vertCheck = (p0.getY() <= click.getY() && click.getY() <= p1.getY());
+				
+				if(Math.abs(distance) <= 4 && horizCheck && vertCheck){
 					returnShape = s;
 					curShapeIndex = stackedShapes.size() -1 - i;
 					model.setShapeIndex(curShapeIndex);
@@ -571,7 +635,7 @@ public class Controller implements CS355Controller {
 				first = new java.awt.geom.Point2D.Double(click.getX() - C.getX(), click.getY() - C.getY());
 				double check3 = (first.getX() * trans.getX()) + (first.getY() * trans.getY());
 				
-				if(check1 > 0 && check2 > 0 && check3 > 0){
+				if((check1 > 0 && check2 > 0 && check3 > 0) || (check1 < 0 && check2 < 0 && check3 < 0)){
 					returnShape = s;
 					curShapeIndex = stackedShapes.size() -1 - i;
 					model.setShapeIndex(curShapeIndex);

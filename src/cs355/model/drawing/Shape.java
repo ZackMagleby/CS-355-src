@@ -17,8 +17,6 @@ public abstract class Shape {
 
 	// The rotation of this shape.
 	protected double rotation;
-	
-	protected Point2D.Double translation;
 
 	/**
 	 * Basic constructor that sets fields.
@@ -30,7 +28,6 @@ public abstract class Shape {
 		this.color = color;
 		this.center = center;
 		rotation = 0.0;
-		translation = new Point2D.Double(0,0);
 	}
 
 	/**
@@ -79,14 +76,6 @@ public abstract class Shape {
 	 */
 	public void setRotation(double rotation) {
 		this.rotation = rotation;
-	}
-	
-	public java.awt.geom.Point2D.Double getTranslation(){
-		return translation;
-	}
-	
-	public void setTranslation(java.awt.geom.Point2D.Double newTrans){
-		translation = newTrans;
 	}
 
 	/**
