@@ -1,57 +1,81 @@
 [
   {
-    "upperLeft": {
-      "x": 83.0,
-      "y": 100.0
+    "a": {
+      "x": -198.66666666666669,
+      "y": 17.333333333333343
     },
-    "size": 115.0,
+    "b": {
+      "x": 94.33333333333331,
+      "y": -111.66666666666666
+    },
+    "c": {
+      "x": 104.33333333333331,
+      "y": 94.33333333333334
+    },
     "color": {
-      "value": -1,
+      "value": -39271,
       "falpha": 0.0
     },
-    "SHAPE_TYPE": "cs355.model.drawing.Square"
+    "center": {
+      "x": 361.6666666666667,
+      "y": 270.66666666666663
+    },
+    "rotation": 4.026319217705212,
+    "SHAPE_TYPE": "cs355.model.drawing.Triangle"
   },
   {
-    "center": {
-      "x": 236.0,
-      "y": 177.0
-    },
-    "width": 104.0,
-    "height": 155.0,
+    "width": 234.0,
+    "height": 157.0,
     "color": {
-      "value": -1,
+      "value": -16763956,
       "falpha": 0.0
     },
+    "center": {
+      "x": 146.0,
+      "y": 235.5
+    },
+    "rotation": 0.0,
     "SHAPE_TYPE": "cs355.model.drawing.Ellipse"
   },
   {
-    "start": {
-      "x": 54.0,
-      "y": 248.0
-    },
-    "end": {
-      "x": 121.0,
-      "y": 311.0
-    },
+    "width": 0.0,
+    "height": 0.0,
     "color": {
-      "value": -1,
+      "value": -39271,
       "falpha": 0.0
     },
-    "SHAPE_TYPE": "cs355.model.drawing.Line"
+    "center": {
+      "x": 59.0,
+      "y": 387.0
+    },
+    "rotation": 0.0,
+    "SHAPE_TYPE": "cs355.model.drawing.Ellipse"
   },
   {
-    "start": {
-      "x": 121.0,
-      "y": 311.0
-    },
-    "end": {
-      "x": 211.0,
-      "y": 409.0
-    },
+    "width": 123.0,
+    "height": 89.0,
     "color": {
-      "value": -1,
+      "value": -10027111,
       "falpha": 0.0
     },
-    "SHAPE_TYPE": "cs355.model.drawing.Line"
+    "center": {
+      "x": 246.5,
+      "y": 213.5
+    },
+    "rotation": 3.58302169726388,
+    "SHAPE_TYPE": "cs355.model.drawing.Rectangle"
+  },
+  {
+    "size": 108.0,
+    "color": {
+      "value": -13382656,
+      "falpha": 0.0
+    },
+    "center": {
+      "x": 282.0,
+      "y": 143.0
+    },
+    "rotation": -0.08314123188844147,
+    "SHAPE_TYPE": "cs355.model.drawing.Square"
   }
 ]

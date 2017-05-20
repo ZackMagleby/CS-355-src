@@ -10,7 +10,8 @@ public enum State {
 	   ELLIPSE(7),
 	   TRIANGLE2(8),
 	   TRIANGLE3(9),
-	   SELECT(10);
+	   SELECT(10),
+	   ROTATE(11);
 	
 	   private int value;
 	   

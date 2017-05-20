@@ -1,5 +1,7 @@
 package cs355.solution;
 
+import java.awt.Color;
+
 import cs355.GUIFunctions;
 import customClasses.Controller;
 import customClasses.Model;
@@ -27,7 +29,7 @@ public class CS355 {
 
 		// Fill in the parameters below with your controller and view.
 		GUIFunctions.createCS355Frame(controllerUse, viewUse);
-
+		GUIFunctions.changeSelectedColor(Color.WHITE);
 		GUIFunctions.refresh();
 	}
 }
