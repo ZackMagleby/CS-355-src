@@ -38,6 +38,7 @@ public class View implements ViewRefresher {
 				Line line = (Line)shape; 
 				AffineTransform objToWorld = new AffineTransform();
 				objToWorld.concatenate(new AffineTransform(zoom,0,0,zoom,0,0));
+				objToWorld.concatenate(new AffineTransform(1,0,0,1,-viewPort.getX(),-viewPort.getY()));
 				objToWorld.concatenate(new AffineTransform(1,0,0,1,shape.getCenter().getX(), shape.getCenter().getY()));
 				objToWorld.concatenate(new AffineTransform(Math.cos(shape.getRotation()), Math.sin(shape.getRotation()), -Math.sin(shape.getRotation()), Math.cos(shape.getRotation()), 0,0));
 				g2d.setTransform(objToWorld);
@@ -52,6 +53,7 @@ public class View implements ViewRefresher {
 				Ellipse ellipse = (Ellipse) shape;
 				AffineTransform objToWorld = new AffineTransform();
 				objToWorld.concatenate(new AffineTransform(zoom,0,0,zoom,0,0));
+				objToWorld.concatenate(new AffineTransform(1,0,0,1,-viewPort.getX(),-viewPort.getY()));
 				objToWorld.concatenate(new AffineTransform(1,0,0,1,shape.getCenter().getX(), shape.getCenter().getY()));
 				objToWorld.concatenate(new AffineTransform(Math.cos(shape.getRotation()), Math.sin(shape.getRotation()), -Math.sin(shape.getRotation()), Math.cos(shape.getRotation()), 0,0));
 				g2d.setTransform(objToWorld);
@@ -66,6 +68,7 @@ public class View implements ViewRefresher {
 				Circle circle = (Circle) shape;
 				AffineTransform objToWorld = new AffineTransform();
 				objToWorld.concatenate(new AffineTransform(zoom,0,0,zoom,0,0));
+				objToWorld.concatenate(new AffineTransform(1,0,0,1,-viewPort.getX(),-viewPort.getY()));
 				objToWorld.concatenate(new AffineTransform(1,0,0,1,shape.getCenter().getX(), shape.getCenter().getY()));
 				objToWorld.concatenate(new AffineTransform(Math.cos(shape.getRotation()), Math.sin(shape.getRotation()), -Math.sin(shape.getRotation()), Math.cos(shape.getRotation()), 0,0));
 				g2d.setTransform(objToWorld);
@@ -83,6 +86,7 @@ public class View implements ViewRefresher {
 				int[] yPoints = {(int)UL.getY(), (int)UL.getY(), (int)(UL.getY() + rect.getHeight()), (int)(UL.getY() + rect.getHeight())};
 				AffineTransform objToWorld = new AffineTransform();
 				objToWorld.concatenate(new AffineTransform(zoom,0,0,zoom,0,0));
+				objToWorld.concatenate(new AffineTransform(1,0,0,1,-viewPort.getX(),-viewPort.getY()));
 				objToWorld.concatenate(new AffineTransform(1,0,0,1,shape.getCenter().getX(), shape.getCenter().getY()));
 				objToWorld.concatenate(new AffineTransform(Math.cos(shape.getRotation()), Math.sin(shape.getRotation()), -Math.sin(shape.getRotation()), Math.cos(shape.getRotation()), 0,0));
 				g2d.setTransform(objToWorld);
@@ -100,6 +104,7 @@ public class View implements ViewRefresher {
 				int[] yPoints = {(int)UL.getY(), (int)UL.getY(), (int)(UL.getY() + square.getSize()), (int)(UL.getY() + square.getSize())};
 				AffineTransform objToWorld = new AffineTransform();
 				objToWorld.concatenate(new AffineTransform(zoom,0,0,zoom,0,0));
+				objToWorld.concatenate(new AffineTransform(1,0,0,1,-viewPort.getX(),-viewPort.getY()));
 				objToWorld.concatenate(new AffineTransform(1,0,0,1,shape.getCenter().getX(), shape.getCenter().getY()));
 				objToWorld.concatenate(new AffineTransform(Math.cos(shape.getRotation()), Math.sin(shape.getRotation()), -Math.sin(shape.getRotation()), Math.cos(shape.getRotation()), 0,0));
 				g2d.setTransform(objToWorld);
@@ -116,6 +121,7 @@ public class View implements ViewRefresher {
 				int[] yPoints = {(int)(tri.getA().getY()), (int)(tri.getB().getY()), (int)(tri.getC().getY())};
 				AffineTransform objToWorld = new AffineTransform();
 				objToWorld.concatenate(new AffineTransform(zoom,0,0,zoom,0,0));
+				objToWorld.concatenate(new AffineTransform(1,0,0,1,-viewPort.getX(),-viewPort.getY()));
 				objToWorld.concatenate(new AffineTransform(1,0,0,1,shape.getCenter().getX(), shape.getCenter().getY()));
 				objToWorld.concatenate(new AffineTransform(Math.cos(shape.getRotation()), Math.sin(shape.getRotation()), -Math.sin(shape.getRotation()), Math.cos(shape.getRotation()), 0,0));
 				g2d.setTransform(objToWorld);
@@ -136,6 +142,7 @@ public class View implements ViewRefresher {
 			g2d.setColor(curColor);
 			AffineTransform objToWorld = new AffineTransform();
 			objToWorld.concatenate(new AffineTransform(zoom,0,0,zoom,0,0));
+			objToWorld.concatenate(new AffineTransform(1,0,0,1,-viewPort.getX(),-viewPort.getY()));
 			objToWorld.concatenate(new AffineTransform(1,0,0,1,curShape.getCenter().getX(), curShape.getCenter().getY()));
 			objToWorld.concatenate(new AffineTransform(Math.cos(curShape.getRotation()), Math.sin(curShape.getRotation()), -Math.sin(curShape.getRotation()), Math.cos(curShape.getRotation()), 0,0));
 			g2d.setTransform(objToWorld);

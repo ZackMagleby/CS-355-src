@@ -3,12 +3,9 @@ package customClasses;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.io.File;
-import java.time.Year;
 import java.util.Iterator;
 import java.util.List;
-import java.util.PrimitiveIterator.OfDouble;
 
 import cs355.GUIFunctions;
 import cs355.controller.CS355Controller;
@@ -33,7 +30,8 @@ public class Controller implements CS355Controller {
 	java.awt.Point thirdPoint;
 	java.awt.Point click;
 	java.awt.geom.Point2D.Double relativePoint;
-	int scale;
+	int viewX;
+	int viewY;
 	
 	Shape curShape;
 	boolean shapeSelected;
@@ -51,6 +49,8 @@ public class Controller implements CS355Controller {
 		curShapeIndex = -1;
 		lineStartEdit = false;
 		lineEndEdit = false;
+		viewX = 0;
+		viewY = 0;
 	}
 	
 	@Override
@@ -544,13 +544,19 @@ public class Controller implements CS355Controller {
 
 	@Override
 	public void hScrollbarChanged(int value) {
-		GUIFunctions.printf(Integer.toString(value));
+		viewX = value;
+		updateView();
 	}
 
 	@Override
 	public void vScrollbarChanged(int value) {
-		// TODO Auto-generated method stub
-
+		viewY = value;
+		updateView();
+	}
+	
+	public void updateView(){
+		view.setView(new java.awt.geom.Point2D.Double(viewX, viewY));
+		model.updateAll();
 	}
 
 	@Override
