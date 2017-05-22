@@ -212,7 +212,7 @@ public class Controller implements CS355Controller {
 			AffineTransform affineTransform = new AffineTransform();
 			affineTransform.concatenate(new AffineTransform(Math.cos(curShape.getRotation()), -Math.sin(curShape.getRotation()), Math.sin(curShape.getRotation()), Math.cos(curShape.getRotation()), 0,0));
 			affineTransform.concatenate(new AffineTransform(1,0,0,1,-curShape.getCenter().getX(), -curShape.getCenter().getY()));
-			affineTransform.concatenate(new AffineTransform(1/zoom,0,0,1/zoom,0,0));
+			//affineTransform.concatenate(new AffineTransform(1/zoom,0,0,1/zoom,0,0));
 			affineTransform.transform(click, transformedClick);
 			
 			if(curShape instanceof Triangle){
