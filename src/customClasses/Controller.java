@@ -57,16 +57,26 @@ public class Controller implements CS355Controller {
 	public void mouseClicked(MouseEvent e) {
 		if(curState == State.TRIANGLE1){
 			firstPoint = e.getPoint();
+				AffineTransform affineTransform = new AffineTransform();
+				affineTransform.concatenate(new AffineTransform(1/zoom,0,0,1/zoom,0,0));
+				affineTransform.transform(firstPoint, firstPoint);
 			curState = State.TRIANGLE2;
 			GUIFunctions.printf("CLICK SECOND POINT");
 		}
 		else if(curState == State.TRIANGLE2){
 			secondPoint = e.getPoint();
+				AffineTransform affineTransform = new AffineTransform();
+				affineTransform.concatenate(new AffineTransform(1/zoom,0,0,1/zoom,0,0));
+				affineTransform.transform(secondPoint, secondPoint);
 			curState = State.TRIANGLE3;
 			GUIFunctions.printf("CLICK THIRD POINT");
 		}
 		else if(curState == State.TRIANGLE3){
 			thirdPoint = e.getPoint();
+			
+			AffineTransform affineTransform = new AffineTransform();
+			affineTransform.concatenate(new AffineTransform(1/zoom,0,0,1/zoom,0,0));
+			affineTransform.transform(thirdPoint, thirdPoint);
 			
 			double centerX = (firstPoint.getX() + secondPoint.getX() + thirdPoint.getX())/3;
 			double centerY = (firstPoint.getY() + secondPoint.getY() + thirdPoint.getY())/3;
@@ -100,10 +110,14 @@ public class Controller implements CS355Controller {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		if(curState != State.TRIANGLE1 || curState != State.TRIANGLE2 || curState != State.TRIANGLE3 || curState != State.SELECT){
-			origin = e.getPoint();	
+			origin = e.getPoint();
+			AffineTransform affineTransform = new AffineTransform();
+			affineTransform.concatenate(new AffineTransform(1/zoom,0,0,1/zoom,0,0));
+			affineTransform.transform(origin, origin);
 		}
 		if(curState == State.SELECT){
 			click = e.getPoint();
+
 			lineStartEdit = false;
 			lineEndEdit = false;	
 			if(curShape instanceof Line){
@@ -253,6 +267,9 @@ public class Controller implements CS355Controller {
 	@Override
 	public void mouseDragged(MouseEvent e) {		
 		secondPoint = e.getPoint();
+			AffineTransform affineTransform = new AffineTransform();
+			affineTransform.concatenate(new AffineTransform(1/zoom,0,0,1/zoom,0,0));
+			affineTransform.transform(secondPoint, secondPoint);
 		if(curState == State.ROTATE){
 			
 			java.awt.geom.Point2D.Double u = new java.awt.geom.Point2D.Double(click.getX() - curShape.getCenter().getX(), click.getY() - curShape.getCenter().getY());
