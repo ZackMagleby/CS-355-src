@@ -22,8 +22,8 @@ public class CS355 {
 		
 		Model freshModel = new Model();
 		
-		Controller controllerUse = new Controller(freshModel);
 		View viewUse = new View(freshModel);
+		Controller controllerUse = new Controller(freshModel, viewUse);
 		
 		freshModel.addObserver(viewUse);
 
