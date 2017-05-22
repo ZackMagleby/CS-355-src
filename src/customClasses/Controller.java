@@ -32,6 +32,7 @@ public class Controller implements CS355Controller {
 	java.awt.Point thirdPoint;
 	java.awt.Point click;
 	java.awt.geom.Point2D.Double relativePoint;
+	int scale;
 	
 	Shape curShape;
 	boolean shapeSelected;
@@ -188,8 +189,8 @@ public class Controller implements CS355Controller {
 		else{
 			java.awt.geom.Point2D.Double transformedClick = new java.awt.geom.Point2D.Double(0,0);
 			AffineTransform affineTransform = new AffineTransform();
-			affineTransform.rotate(-curShape.getRotation());
-			affineTransform.translate(-curShape.getCenter().getX(), -curShape.getCenter().getY());
+			affineTransform.concatenate(new AffineTransform(Math.cos(curShape.getRotation()), -Math.sin(curShape.getRotation()), Math.sin(curShape.getRotation()), Math.cos(curShape.getRotation()), 0,0));
+			affineTransform.concatenate(new AffineTransform(1,0,0,1,-curShape.getCenter().getX(), -curShape.getCenter().getY()));
 			affineTransform.transform(click, transformedClick);
 			
 			if(curShape instanceof Triangle){
@@ -463,7 +464,7 @@ public class Controller implements CS355Controller {
 
 	@Override
 	public void zoomInButtonHit() {
-		// TODO Auto-generated method stub
+		
 
 	}
 
@@ -633,8 +634,8 @@ public class Controller implements CS355Controller {
 				
 				java.awt.geom.Point2D.Double transformedClick = new java.awt.geom.Point2D.Double(0,0);
 				AffineTransform affineTransform = new AffineTransform();
-				affineTransform.rotate(-s.getRotation());
-				affineTransform.translate(-s.getCenter().getX(), -s.getCenter().getY());
+				affineTransform.concatenate(new AffineTransform(Math.cos(s.getRotation()), -Math.sin(s.getRotation()), Math.sin(s.getRotation()), Math.cos(s.getRotation()), 0,0));
+				affineTransform.concatenate(new AffineTransform(1,0,0,1,-s.getCenter().getX(), -s.getCenter().getY()));
 				affineTransform.transform(click, transformedClick);
 				
 				double finalCompare = Math.pow(transformedClick.getX(), 2) + Math.pow(transformedClick.getY(), 2);
@@ -652,8 +653,8 @@ public class Controller implements CS355Controller {
 				
 				java.awt.geom.Point2D.Double transformedClick = new java.awt.geom.Point2D.Double(0,0);
 				AffineTransform affineTransform = new AffineTransform();
-				affineTransform.rotate(-s.getRotation());
-				affineTransform.translate(-s.getCenter().getX(), -s.getCenter().getY());
+				affineTransform.concatenate(new AffineTransform(Math.cos(s.getRotation()), -Math.sin(s.getRotation()), Math.sin(s.getRotation()), Math.cos(s.getRotation()), 0,0));
+				affineTransform.concatenate(new AffineTransform(1,0,0,1,-s.getCenter().getX(), -s.getCenter().getY()));
 				affineTransform.transform(click, transformedClick);
 				
 				java.awt.geom.Point2D.Double UL = new java.awt.geom.Point2D.Double(-(square.getSize()/2), -(square.getSize()/2));
@@ -675,8 +676,8 @@ public class Controller implements CS355Controller {
 				
 				java.awt.geom.Point2D.Double transformedClick = new java.awt.geom.Point2D.Double(0,0);
 				AffineTransform affineTransform = new AffineTransform();
-				affineTransform.rotate(-s.getRotation());
-				affineTransform.translate(-s.getCenter().getX(), -s.getCenter().getY());
+				affineTransform.concatenate(new AffineTransform(Math.cos(s.getRotation()), -Math.sin(s.getRotation()), Math.sin(s.getRotation()), Math.cos(s.getRotation()), 0,0));
+				affineTransform.concatenate(new AffineTransform(1,0,0,1,-s.getCenter().getX(), -s.getCenter().getY()));
 				affineTransform.transform(click, transformedClick);
 				
 				double a = ellipse.getWidth()/2;
@@ -698,8 +699,8 @@ public class Controller implements CS355Controller {
 				
 				java.awt.geom.Point2D.Double transformedClick = new java.awt.geom.Point2D.Double(0,0);
 				AffineTransform affineTransform = new AffineTransform();
-				affineTransform.rotate(-s.getRotation());
-				affineTransform.translate(-s.getCenter().getX(), -s.getCenter().getY());
+				affineTransform.concatenate(new AffineTransform(Math.cos(s.getRotation()), -Math.sin(s.getRotation()), Math.sin(s.getRotation()), Math.cos(s.getRotation()), 0,0));
+				affineTransform.concatenate(new AffineTransform(1,0,0,1,-s.getCenter().getX(), -s.getCenter().getY()));
 				affineTransform.transform(click, transformedClick);
 					
 				java.awt.geom.Point2D.Double UL = new java.awt.geom.Point2D.Double(-(rect.getWidth()/2), -(rect.getHeight()/2));
@@ -722,8 +723,8 @@ public class Controller implements CS355Controller {
 				
 				java.awt.geom.Point2D.Double transformedClick = new java.awt.geom.Point2D.Double(0,0);
 				AffineTransform affineTransform = new AffineTransform();
-				affineTransform.rotate(-s.getRotation());
-				affineTransform.translate(-s.getCenter().getX(), -s.getCenter().getY());
+				affineTransform.concatenate(new AffineTransform(Math.cos(s.getRotation()), -Math.sin(s.getRotation()), Math.sin(s.getRotation()), Math.cos(s.getRotation()), 0,0));
+				affineTransform.concatenate(new AffineTransform(1,0,0,1,-s.getCenter().getX(), -s.getCenter().getY()));
 				affineTransform.transform(click, transformedClick);
 				
 				p0 = new java.awt.geom.Point2D.Double(p0.getX()+0, p0.getY()+0);
@@ -761,8 +762,8 @@ public class Controller implements CS355Controller {
 				
 				java.awt.geom.Point2D.Double transformedClick = new java.awt.geom.Point2D.Double(0,0);
 				AffineTransform affineTransform = new AffineTransform();
-				affineTransform.rotate(-s.getRotation());
-				affineTransform.translate(-s.getCenter().getX(), -s.getCenter().getY());
+				affineTransform.concatenate(new AffineTransform(Math.cos(s.getRotation()), -Math.sin(s.getRotation()), Math.sin(s.getRotation()), Math.cos(s.getRotation()), 0,0));
+				affineTransform.concatenate(new AffineTransform(1,0,0,1,-s.getCenter().getX(), -s.getCenter().getY()));
 				affineTransform.transform(click, transformedClick);
 				
 				java.awt.geom.Point2D.Double center = new java.awt.geom.Point2D.Double(0,0);

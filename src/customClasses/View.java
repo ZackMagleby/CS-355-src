@@ -26,7 +26,7 @@ public class View implements ViewRefresher {
 	}
 
 	@Override
-	public void refreshView(Graphics2D g2d) {
+	public void refreshView(Graphics2D g2d){
 		Color curColor = Color.WHITE;
 		String outlineType = null;
 		Shape curShape = null;
@@ -36,8 +36,8 @@ public class View implements ViewRefresher {
 			if(shape instanceof Line){
 				Line line = (Line)shape; 
 				AffineTransform objToWorld = new AffineTransform();
-				objToWorld.translate(line.getCenter().getX(), line.getCenter().getY());
-				objToWorld.rotate(line.getRotation());
+				objToWorld.concatenate(new AffineTransform(1,0,0,1,shape.getCenter().getX(), shape.getCenter().getY()));
+				objToWorld.concatenate(new AffineTransform(Math.cos(shape.getRotation()), Math.sin(shape.getRotation()), -Math.sin(shape.getRotation()), Math.cos(shape.getRotation()), 0,0));
 				g2d.setTransform(objToWorld);
 				g2d.setColor(line.getColor());
 				g2d.drawLine((int)line.getStart().getX(), (int)line.getStart().getY(), (int)line.getEnd().getX(), (int)line.getEnd().getY());
@@ -49,8 +49,8 @@ public class View implements ViewRefresher {
 			else if(shape instanceof Ellipse){
 				Ellipse ellipse = (Ellipse) shape;
 				AffineTransform objToWorld = new AffineTransform();
-				objToWorld.translate(ellipse.getCenter().getX(), ellipse.getCenter().getY());
-				objToWorld.rotate(ellipse.getRotation());
+				objToWorld.concatenate(new AffineTransform(1,0,0,1,shape.getCenter().getX(), shape.getCenter().getY()));
+				objToWorld.concatenate(new AffineTransform(Math.cos(shape.getRotation()), Math.sin(shape.getRotation()), -Math.sin(shape.getRotation()), Math.cos(shape.getRotation()), 0,0));
 				g2d.setTransform(objToWorld);
 				g2d.setColor(ellipse.getColor());
 				g2d.fillOval((int)(0 - ellipse.getWidth()/2), (int)(0 - ellipse.getHeight()/2), (int)ellipse.getWidth(), (int)ellipse.getHeight());
@@ -62,8 +62,8 @@ public class View implements ViewRefresher {
 			else if(shape instanceof Circle){
 				Circle circle = (Circle) shape;
 				AffineTransform objToWorld = new AffineTransform();
-				objToWorld.translate(circle.getCenter().getX(), circle.getCenter().getY());
-				objToWorld.rotate(circle.getRotation());
+				objToWorld.concatenate(new AffineTransform(1,0,0,1,shape.getCenter().getX(), shape.getCenter().getY()));
+				objToWorld.concatenate(new AffineTransform(Math.cos(shape.getRotation()), Math.sin(shape.getRotation()), -Math.sin(shape.getRotation()), Math.cos(shape.getRotation()), 0,0));
 				g2d.setTransform(objToWorld);
 				g2d.setColor(circle.getColor());
 				g2d.fillOval((int)(0-circle.getRadius()/2), (int)(0-circle.getRadius()/2), (int)circle.getRadius(), (int)circle.getRadius());
@@ -78,8 +78,8 @@ public class View implements ViewRefresher {
 				int[] xPoints = {(int)UL.getX(), (int)(UL.getX() + rect.getWidth()), (int)(UL.getX() + rect.getWidth()), (int)UL.getX()};
 				int[] yPoints = {(int)UL.getY(), (int)UL.getY(), (int)(UL.getY() + rect.getHeight()), (int)(UL.getY() + rect.getHeight())};
 				AffineTransform objToWorld = new AffineTransform();
-				objToWorld.translate(rect.getCenter().getX(), rect.getCenter().getY());
-				objToWorld.rotate(rect.getRotation());
+				objToWorld.concatenate(new AffineTransform(1,0,0,1,shape.getCenter().getX(), shape.getCenter().getY()));
+				objToWorld.concatenate(new AffineTransform(Math.cos(shape.getRotation()), Math.sin(shape.getRotation()), -Math.sin(shape.getRotation()), Math.cos(shape.getRotation()), 0,0));
 				g2d.setTransform(objToWorld);
 				g2d.setColor(rect.getColor());
 				g2d.fillPolygon(xPoints, yPoints, 4);
@@ -94,8 +94,8 @@ public class View implements ViewRefresher {
 				int[] xPoints = {(int)UL.getX(), (int)(UL.getX() + square.getSize()),(int)(UL.getX() + square.getSize()), (int)UL.getX()};
 				int[] yPoints = {(int)UL.getY(), (int)UL.getY(), (int)(UL.getY() + square.getSize()), (int)(UL.getY() + square.getSize())};
 				AffineTransform objToWorld = new AffineTransform();
-				objToWorld.translate(square.getCenter().getX(), square.getCenter().getY());
-				objToWorld.rotate(square.getRotation());
+				objToWorld.concatenate(new AffineTransform(1,0,0,1,shape.getCenter().getX(), shape.getCenter().getY()));
+				objToWorld.concatenate(new AffineTransform(Math.cos(shape.getRotation()), Math.sin(shape.getRotation()), -Math.sin(shape.getRotation()), Math.cos(shape.getRotation()), 0,0));
 				g2d.setTransform(objToWorld);
 				g2d.setColor(square.getColor());
 				g2d.fillPolygon(xPoints, yPoints, 4);
@@ -109,8 +109,8 @@ public class View implements ViewRefresher {
 				int[] xPoints = {(int)(tri.getA().getX()), (int)(tri.getB().getX()), (int)(tri.getC().getX())};
 				int[] yPoints = {(int)(tri.getA().getY()), (int)(tri.getB().getY()), (int)(tri.getC().getY())};
 				AffineTransform objToWorld = new AffineTransform();
-				objToWorld.translate(tri.getCenter().getX(), tri.getCenter().getY());
-				objToWorld.rotate(tri.getRotation());
+				objToWorld.concatenate(new AffineTransform(1,0,0,1,shape.getCenter().getX(), shape.getCenter().getY()));
+				objToWorld.concatenate(new AffineTransform(Math.cos(shape.getRotation()), Math.sin(shape.getRotation()), -Math.sin(shape.getRotation()), Math.cos(shape.getRotation()), 0,0));
 				g2d.setTransform(objToWorld);
 				g2d.setColor(tri.getColor());
 				g2d.fillPolygon(xPoints, yPoints, 3);
@@ -128,8 +128,8 @@ public class View implements ViewRefresher {
 			}
 			g2d.setColor(curColor);
 			AffineTransform objToWorld = new AffineTransform();
-			objToWorld.translate(curShape.getCenter().getX(), curShape.getCenter().getY());
-			objToWorld.rotate(curShape.getRotation());
+			objToWorld.concatenate(new AffineTransform(1,0,0,1,curShape.getCenter().getX(), curShape.getCenter().getY()));
+			objToWorld.concatenate(new AffineTransform(Math.cos(curShape.getRotation()), Math.sin(curShape.getRotation()), -Math.sin(curShape.getRotation()), Math.cos(curShape.getRotation()), 0,0));
 			g2d.setTransform(objToWorld);
 			switch(outlineType){
 				case "LINE":
