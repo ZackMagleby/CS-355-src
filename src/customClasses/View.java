@@ -123,8 +123,10 @@ public class View implements ViewRefresher {
 					Line line = (Line)curShape; 
 					java.awt.geom.Point2D.Double start = line.getStart();
 					java.awt.geom.Point2D.Double end = line.getEnd();
+					
 					g2d.drawRect((int)(start.getX()-(4/zoom)), (int)(start.getY()-(4/zoom)), (int)(8/zoom), (int)(8/zoom));
 					g2d.drawRect((int)(end.getX()-(4/zoom)), (int)(end.getY()-(4/zoom)), (int)(8/zoom), (int)(8/zoom));
+					
 					g2d.drawLine((int)start.getX(), (int)start.getY(), (int)end.getX(), (int)end.getY());
 					break;
 				case "SQUARE":
@@ -147,14 +149,14 @@ public class View implements ViewRefresher {
 					Circle circle = (Circle) curShape;
 					g2d.drawRect(-(int)(circle.getRadius()/2), -(int)(circle.getRadius()/2), (int)circle.getRadius(), (int)circle.getRadius());
 		
-					g2d.drawRect((int)(-(4)), -(int)((circle.getRadius()/2) + (12/zoom)), (int)(8/zoom), (int)(8/zoom));
+					g2d.drawRect((int)(-4/zoom), -(int)((circle.getRadius()/2) + (12/zoom)), (int)(8/zoom), (int)(8/zoom));
 					
 					break;
 				case "ELLIPSE":
 					Ellipse ellipse = (Ellipse) curShape;
 					g2d.drawRect(-(int)(ellipse.getWidth()/2), -(int)ellipse.getHeight()/2, (int)ellipse.getWidth(), (int)ellipse.getHeight());
 					
-					g2d.drawRect((int)(-(4)), -(int)((ellipse.getHeight()/2) + (12/zoom)), (int)(8/zoom), (int)(8/zoom));
+					g2d.drawRect((int)(-4/zoom), -(int)((ellipse.getHeight()/2) + (12/zoom)), (int)(8/zoom), (int)(8/zoom));
 					
 					break;
 				case "TRI":

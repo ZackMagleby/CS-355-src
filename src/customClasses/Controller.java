@@ -466,34 +466,28 @@ public class Controller implements CS355Controller {
 
 	@Override
 	public void zoomInButtonHit() {
+		int barWidth = 125;
 		if(zoom == .25){
-			GUIFunctions.setHScrollBarKnob(1000);
-			GUIFunctions.setVScrollBarKnob(1000);
-			GUIFunctions.setHScrollBarPosit(0);
-			GUIFunctions.setVScrollBarPosit(0);
+			barWidth = 1024;
 			zoom = .5;
 		}
 		else if(zoom == .5){
-			GUIFunctions.setHScrollBarKnob(500);
-			GUIFunctions.setVScrollBarKnob(500);
-			GUIFunctions.setHScrollBarPosit(0);
-			GUIFunctions.setVScrollBarPosit(0);
+			barWidth = 512;
 			zoom = 1;
 		}
 		else if(zoom == 1){
-			GUIFunctions.setHScrollBarKnob(250);
-			GUIFunctions.setVScrollBarKnob(250);
-			GUIFunctions.setHScrollBarPosit(0);
-			GUIFunctions.setVScrollBarPosit(0);
+			barWidth = 256;
 			zoom = 2;
 		}
-		else if(zoom == 2){
-			GUIFunctions.setHScrollBarKnob(125);
-			GUIFunctions.setVScrollBarKnob(125);
-			GUIFunctions.setHScrollBarPosit(0);
-			GUIFunctions.setVScrollBarPosit(0);
+		else{
+			barWidth = 128;
 			zoom = 4;
 		}
+
+		GUIFunctions.setHScrollBarKnob(barWidth);
+		GUIFunctions.setVScrollBarKnob(barWidth);
+		GUIFunctions.setHScrollBarPosit(viewX);
+		GUIFunctions.setVScrollBarPosit(viewY);
 		GUIFunctions.printf("Zoom Level: " + (zoom*100) + "%%");
 		view.setZoom(zoom);
 		model.updateAll();
@@ -501,36 +495,47 @@ public class Controller implements CS355Controller {
 
 	@Override
 	public void zoomOutButtonHit() {
+		int barWidth = 2048;
 		if(zoom == .5){
-			GUIFunctions.setHScrollBarKnob(2048);
-			GUIFunctions.setVScrollBarKnob(2048);
-			GUIFunctions.setHScrollBarPosit(0);
-			GUIFunctions.setVScrollBarPosit(0);
+			barWidth = 2048;
 			viewX = 0;
 			viewY = 0;
 			zoom = .25;
 		}
 		else if(zoom == 1){
-			GUIFunctions.setHScrollBarKnob(1000);
-			GUIFunctions.setVScrollBarKnob(1000);
-			GUIFunctions.setHScrollBarPosit(0);
-			GUIFunctions.setVScrollBarPosit(0);
+			barWidth = 1024;
+			if(viewX + 1024 > 2048){
+				viewX = 1024;
+			}
+			if(viewY + 1024 > 2048){
+				viewY = 1024;
+			}
 			zoom = .5;
 		}
 		else if(zoom == 2){
-			GUIFunctions.setHScrollBarKnob(500);
-			GUIFunctions.setVScrollBarKnob(500);
-			GUIFunctions.setHScrollBarPosit(0);
-			GUIFunctions.setVScrollBarPosit(0);
+			barWidth = 512;
+			if(viewX + 512 > 2048){
+				viewX = 1536;
+			}
+			if(viewY + 512 > 2048){
+				viewY = 1536;
+			}
 			zoom = 1;
 		}
 		else if(zoom == 4){
-			GUIFunctions.setHScrollBarKnob(250);
-			GUIFunctions.setVScrollBarKnob(250);
-			GUIFunctions.setHScrollBarPosit(0);
-			GUIFunctions.setVScrollBarPosit(0);
+			barWidth = 256;
+			if(viewX + 256 > 2048){
+				viewX = 1792;
+			}
+			if(viewY + 256 > 2048){
+				viewY = 1792;
+			}
 			zoom = 2;
 		}
+		GUIFunctions.setHScrollBarPosit(viewX);
+		GUIFunctions.setVScrollBarPosit(viewY);
+		GUIFunctions.setHScrollBarKnob(barWidth);
+		GUIFunctions.setVScrollBarKnob(barWidth);
 		GUIFunctions.printf("Zoom Level: " + Double.toString((zoom*100)) + "%%");
 		view.setZoom(zoom);
 		model.updateAll();
