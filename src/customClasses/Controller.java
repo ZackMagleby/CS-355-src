@@ -60,7 +60,6 @@ public class Controller implements CS355Controller {
 				AffineTransform aT = viewToWorld();
 				aT.transform(firstPoint, firstPoint);
 			curState = State.TRIANGLE2;
-			//GUIFunctions.printf("CLICK SECOND POINT");
 		}
 		else if(curState == State.TRIANGLE2){
 			secondPoint = e.getPoint();
@@ -69,7 +68,6 @@ public class Controller implements CS355Controller {
 			aT.transform(secondPoint, secondPoint);
 			
 			curState = State.TRIANGLE3;
-			//GUIFunctions.printf("CLICK THIRD POINT");
 		}
 		else if(curState == State.TRIANGLE3){
 			thirdPoint = e.getPoint();
@@ -143,30 +141,27 @@ public class Controller implements CS355Controller {
 					lineEndEdit = true;
 				}
 			}
-			//else{
-				boolean clickedInBox = handleCheck();
-				if(clickedInBox){
-					//GUIFunctions.printf("ROTATE MODE");
-					curState = State.ROTATE;
+			
+			boolean clickedInBox = handleCheck();
+			if(clickedInBox){
+				curState = State.ROTATE;
 
+			}
+			else{
+				curShape = findSelectedShape();
+				if(curShape != null){
+					controllorColor = curShape.getColor();
+					GUIFunctions.changeSelectedColor(curShape.getColor());									
 				}
 				else{
-					curShape = findSelectedShape();
-					if(curShape != null){
-						controllorColor = curShape.getColor();
-						GUIFunctions.changeSelectedColor(curShape.getColor());									
-					}
-					else{
-						controllorColor = Color.WHITE;
-						GUIFunctions.changeSelectedColor(Color.WHITE);
-					}
+					controllorColor = Color.WHITE;
+					GUIFunctions.changeSelectedColor(Color.WHITE);
 				}
-			//}				
-				
-				if(curShape != null){
-					relativePoint = new java.awt.geom.Point2D.Double(curShape.getCenter().getX(), curShape.getCenter().getY());				
-				}				
+			}
 
+			if(curShape != null){
+				relativePoint = new java.awt.geom.Point2D.Double(curShape.getCenter().getX(), curShape.getCenter().getY());				
+			}				
 
 			return;
 		}
