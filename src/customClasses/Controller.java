@@ -466,7 +466,7 @@ public class Controller implements CS355Controller {
 
 	@Override
 	public void zoomInButtonHit() {
-		int barWidth = 125;
+		int barWidth = 0;
 		if(zoom == .25){
 			barWidth = 1024;
 			zoom = .5;
@@ -479,15 +479,15 @@ public class Controller implements CS355Controller {
 			barWidth = 256;
 			zoom = 2;
 		}
-		else{
+		else if(zoom == 2){
 			barWidth = 128;
 			zoom = 4;
 		}
 
 		GUIFunctions.setHScrollBarKnob(barWidth);
 		GUIFunctions.setVScrollBarKnob(barWidth);
-		GUIFunctions.setHScrollBarPosit(viewX);
-		GUIFunctions.setVScrollBarPosit(viewY);
+		GUIFunctions.setHScrollBarPosit(viewX + (barWidth/2));
+		GUIFunctions.setVScrollBarPosit(viewY + (barWidth/2));
 		GUIFunctions.printf("Zoom Level: " + (zoom*100) + "%%");
 		view.setZoom(zoom);
 		model.updateAll();
@@ -504,36 +504,36 @@ public class Controller implements CS355Controller {
 		}
 		else if(zoom == 1){
 			barWidth = 1024;
-			if(viewX + 1024 > 2048){
+			if(viewX + barWidth > 2048){
 				viewX = 1024;
 			}
-			if(viewY + 1024 > 2048){
+			if(viewY + barWidth > 2048){
 				viewY = 1024;
 			}
 			zoom = .5;
 		}
 		else if(zoom == 2){
 			barWidth = 512;
-			if(viewX + 512 > 2048){
+			if(viewX + barWidth > 2048){
 				viewX = 1536;
 			}
-			if(viewY + 512 > 2048){
+			if(viewY + barWidth > 2048){
 				viewY = 1536;
 			}
 			zoom = 1;
 		}
 		else if(zoom == 4){
 			barWidth = 256;
-			if(viewX + 256 > 2048){
+			if(viewX + barWidth > 2048){
 				viewX = 1792;
 			}
-			if(viewY + 256 > 2048){
+			if(viewY + barWidth > 2048){
 				viewY = 1792;
 			}
 			zoom = 2;
 		}
-		GUIFunctions.setHScrollBarPosit(viewX);
-		GUIFunctions.setVScrollBarPosit(viewY);
+		GUIFunctions.setHScrollBarPosit(viewX - barWidth/4);
+		GUIFunctions.setVScrollBarPosit(viewY - barWidth/4);
 		GUIFunctions.setHScrollBarKnob(barWidth);
 		GUIFunctions.setVScrollBarKnob(barWidth);
 		GUIFunctions.printf("Zoom Level: " + Double.toString((zoom*100)) + "%%");
@@ -804,7 +804,7 @@ public class Controller implements CS355Controller {
 				boolean horizCheck = (Math.min(p0.getX(), p1.getX()) <= transformedClick.getX() && transformedClick.getX() <= Math.max(p0.getX(), p1.getX()));
 				boolean vertCheck = (Math.min(p0.getY(), p1.getY()) <= transformedClick.getY() && transformedClick.getY() <= Math.max(p0.getY(), p1.getY()));
 				
-				if(Math.abs(distance) <= 4 && horizCheck && vertCheck){
+				if(Math.abs(distance) <= (4/zoom) && horizCheck && vertCheck){
 					returnShape = s;
 					curShapeIndex = stackedShapes.size() -1 - i;
 					model.setShapeIndex(curShapeIndex);
