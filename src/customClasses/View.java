@@ -151,8 +151,8 @@ public class View implements ViewRefresher {
 					Line line = (Line)curShape; 
 					java.awt.geom.Point2D.Double start = line.getStart();
 					java.awt.geom.Point2D.Double end = line.getEnd();
-					g2d.drawRect((int)start.getX()-4, (int)start.getY()-4, 8, 8);
-					g2d.drawRect((int)end.getX()-4, (int)end.getY()-4, 8, 8);
+					g2d.drawRect((int)(start.getX()-(4/zoom)), (int)(start.getY()-(4/zoom)), (int)(8/zoom), (int)(8/zoom));
+					g2d.drawRect((int)(end.getX()-(4/zoom)), (int)(end.getY()-(4/zoom)), (int)(8/zoom), (int)(8/zoom));
 					g2d.drawLine((int)start.getX(), (int)start.getY(), (int)end.getX(), (int)end.getY());
 					break;
 				case "SQUARE":
@@ -160,7 +160,7 @@ public class View implements ViewRefresher {
 					java.awt.geom.Point2D.Double UL = new java.awt.geom.Point2D.Double(0-(square.getSize()/2), 0-(square.getSize()/2));
 					g2d.drawRect((int)UL.getX(), (int)UL.getY(), (int)square.getSize(), (int)square.getSize());
 					
-					g2d.drawRect((int)(UL.getX()+square.getSize()/2-4), (int)(UL.getY()-12), 8, 8);
+					g2d.drawRect((int)(UL.getX()+square.getSize()/2-(4/zoom)), (int)(UL.getY()-(12/zoom)), (int)(8/zoom), (int)(8/zoom));
 					
 					break;
 				case "RECT":
@@ -168,21 +168,21 @@ public class View implements ViewRefresher {
 					java.awt.geom.Point2D.Double upperLeft = new java.awt.geom.Point2D.Double(0-(rect.getWidth()/2), 0-(rect.getHeight()/2));
 					g2d.drawRect((int)upperLeft.getX(), (int)upperLeft.getY(), (int)rect.getWidth(), (int)rect.getHeight());
 
-					g2d.drawRect((int)(upperLeft.getX()+rect.getWidth()/2-4), (int)(upperLeft.getY()-12), 8, 8);
+					g2d.drawRect((int)(upperLeft.getX()+rect.getWidth()/2-(4/zoom)), (int)(upperLeft.getY()-(12/zoom)), (int)(8/zoom), (int)(8/zoom));
 					
 					break;
 				case "CIRCLE":
 					Circle circle = (Circle) curShape;
 					g2d.drawRect(-(int)(circle.getRadius()/2), -(int)(circle.getRadius()/2), (int)circle.getRadius(), (int)circle.getRadius());
 		
-					g2d.drawRect((int)(-4), -(int)(circle.getRadius()/2)-12, 8, 8);
+					g2d.drawRect((int)(-(4)), -(int)((circle.getRadius()/2) + (12/zoom)), (int)(8/zoom), (int)(8/zoom));
 					
 					break;
 				case "ELLIPSE":
 					Ellipse ellipse = (Ellipse) curShape;
 					g2d.drawRect(-(int)(ellipse.getWidth()/2), -(int)ellipse.getHeight()/2, (int)ellipse.getWidth(), (int)ellipse.getHeight());
 					
-					g2d.drawRect((int)(-4), -(int)(ellipse.getHeight()/2)-12, 8, 8);
+					g2d.drawRect((int)(-(4)), -(int)((ellipse.getHeight()/2) + (12/zoom)), (int)(8/zoom), (int)(8/zoom));
 					
 					break;
 				case "TRI":
@@ -191,9 +191,9 @@ public class View implements ViewRefresher {
 					g2d.drawLine((int)(tri.getB().getX() + 0), (int)(tri.getB().getY() + 0), (int)(tri.getC().getX() + 0), (int)(tri.getC().getY() + 0));
 					g2d.drawLine((int)(tri.getC().getX() + 0), (int)(tri.getC().getY() + 0), (int)(tri.getA().getX() + 0), (int)(tri.getA().getY() + 0));
 					
-					double xValue = (Math.min(Math.min(tri.getA().getY(), tri.getB().getY()), tri.getC().getY()) + Math.max(Math.max(tri.getA().getY(), tri.getB().getY()), tri.getC().getY()))/2 -4;
-					double yValue = Math.min(Math.min(tri.getA().getY(), tri.getB().getY()), tri.getC().getY())-12;
-					g2d.drawRect((int)xValue, (int)yValue, 8, 8);
+					double xValue = (Math.min(Math.min(tri.getA().getY(), tri.getB().getY()), tri.getC().getY()) + Math.max(Math.max(tri.getA().getY(), tri.getB().getY()), tri.getC().getY()))/2 -(4/zoom);
+					double yValue = Math.min(Math.min(tri.getA().getY(), tri.getB().getY()), tri.getC().getY())-(12/zoom);
+					g2d.drawRect((int)xValue, (int)yValue, (int)(8/zoom), (int)(8/zoom));
 					break;
 			}
 		}

@@ -58,23 +58,26 @@ public class Controller implements CS355Controller {
 		if(curState == State.TRIANGLE1){
 			firstPoint = e.getPoint();
 				AffineTransform affineTransform = new AffineTransform();
+				affineTransform.concatenate(new AffineTransform(1,0,0,1,viewX,viewY));
 				affineTransform.concatenate(new AffineTransform(1/zoom,0,0,1/zoom,0,0));
 				affineTransform.transform(firstPoint, firstPoint);
 			curState = State.TRIANGLE2;
-			GUIFunctions.printf("CLICK SECOND POINT");
+			//GUIFunctions.printf("CLICK SECOND POINT");
 		}
 		else if(curState == State.TRIANGLE2){
 			secondPoint = e.getPoint();
 				AffineTransform affineTransform = new AffineTransform();
+				affineTransform.concatenate(new AffineTransform(1,0,0,1,viewX,viewY));
 				affineTransform.concatenate(new AffineTransform(1/zoom,0,0,1/zoom,0,0));
 				affineTransform.transform(secondPoint, secondPoint);
 			curState = State.TRIANGLE3;
-			GUIFunctions.printf("CLICK THIRD POINT");
+			//GUIFunctions.printf("CLICK THIRD POINT");
 		}
 		else if(curState == State.TRIANGLE3){
 			thirdPoint = e.getPoint();
 			
 			AffineTransform affineTransform = new AffineTransform();
+			affineTransform.concatenate(new AffineTransform(1,0,0,1,viewX,viewY));
 			affineTransform.concatenate(new AffineTransform(1/zoom,0,0,1/zoom,0,0));
 			affineTransform.transform(thirdPoint, thirdPoint);
 			
@@ -90,7 +93,7 @@ public class Controller implements CS355Controller {
 			model.addShape(tri);
 			model.updateAll();
 			curState = State.TRIANGLE1;
-			GUIFunctions.printf("CLICK FIRST POINT");
+			//GUIFunctions.printf("CLICK FIRST POINT");
 		}
 
 	}
@@ -112,12 +115,14 @@ public class Controller implements CS355Controller {
 		if(curState != State.TRIANGLE1 || curState != State.TRIANGLE2 || curState != State.TRIANGLE3 || curState != State.SELECT){
 			origin = e.getPoint();
 			AffineTransform affineTransform = new AffineTransform();
+			affineTransform.concatenate(new AffineTransform(1,0,0,1,viewX,viewY));
 			affineTransform.concatenate(new AffineTransform(1/zoom,0,0,1/zoom,0,0));
 			affineTransform.transform(origin, origin);
 		}
 		if(curState == State.SELECT){
 			click = e.getPoint();
 			AffineTransform affineTransform = new AffineTransform();
+			affineTransform.concatenate(new AffineTransform(1,0,0,1,viewX,viewY));
 			affineTransform.concatenate(new AffineTransform(1/zoom,0,0,1/zoom,0,0));
 			affineTransform.transform(click, click);
 
@@ -130,15 +135,15 @@ public class Controller implements CS355Controller {
 				java.awt.geom.Point2D.Double end = line.getEnd();
 				java.awt.geom.Point2D.Double relativeClick = new java.awt.geom.Point2D.Double(click.getX() - line.getCenter().getX(), click.getY() - line.getCenter().getY());
 				
-				boolean check1 = (relativeClick.getX() < start.getX() + 4);
-				boolean check2 = (relativeClick.getX() > start.getX() - 4);
-				boolean check3 = (relativeClick.getY() < start.getY() +4);
-				boolean check4 = (relativeClick.getY() > start.getY() - 4);
+				boolean check1 = (relativeClick.getX() < start.getX() + 4/zoom);
+				boolean check2 = (relativeClick.getX() > start.getX() - 4/zoom);
+				boolean check3 = (relativeClick.getY() < start.getY() + 4/zoom);
+				boolean check4 = (relativeClick.getY() > start.getY() - 4/zoom);
 				
-				boolean check5 = (relativeClick.getX() > end.getX() - 4);
-				boolean check6 = (relativeClick.getX() < end.getX() +4);
-				boolean check7 = (relativeClick.getY() > end.getY() -4);
-				boolean check8 = (relativeClick.getY() < end.getY() +4);
+				boolean check5 = (relativeClick.getX() > end.getX() - 4/zoom);
+				boolean check6 = (relativeClick.getX() < end.getX() + 4/zoom);
+				boolean check7 = (relativeClick.getY() > end.getY() - 4/zoom);
+				boolean check8 = (relativeClick.getY() < end.getY() + 4/zoom);
 				
 				if(check1 && check2 && check3 && check4){
 					lineStartEdit = true;
@@ -150,7 +155,7 @@ public class Controller implements CS355Controller {
 			//else{
 				boolean clickedInBox = handleCheck();
 				if(clickedInBox){
-					GUIFunctions.printf("ROTATE MODE");
+					//GUIFunctions.printf("ROTATE MODE");
 					curState = State.ROTATE;
 
 				}
@@ -217,12 +222,12 @@ public class Controller implements CS355Controller {
 			
 			if(curShape instanceof Triangle){
 				Triangle tri = (Triangle)curShape;
-				double xValue = (Math.min(Math.min(tri.getA().getY(), tri.getB().getY()), tri.getC().getY()) + Math.max(Math.max(tri.getA().getY(), tri.getB().getY()), tri.getC().getY()))/2 -4;
-				double yValue = Math.min(Math.min(tri.getA().getY(), tri.getB().getY()), tri.getC().getY())-12;
+				double xValue = (Math.min(Math.min(tri.getA().getY(), tri.getB().getY()), tri.getC().getY()) + Math.max(Math.max(tri.getA().getY(), tri.getB().getY()), tri.getC().getY()))/2 -(4/zoom);
+				double yValue = Math.min(Math.min(tri.getA().getY(), tri.getB().getY()), tri.getC().getY())-(12/zoom);
 				
 				java.awt.geom.Point2D.Double relativeClick = new java.awt.geom.Point2D.Double(transformedClick.getX(), transformedClick.getY());
 				
-				if(((relativeClick.getX() <= xValue+8) && (relativeClick.getX() >= xValue)) && ((relativeClick.getY() <= yValue+8) && (relativeClick.getY() >= yValue))){
+				if(((relativeClick.getX() <= xValue+(8/zoom)) && (relativeClick.getX() >= xValue)) && ((relativeClick.getY() <= yValue+(8/zoom)) && (relativeClick.getY() >= yValue))){
 					return true;
 				}
 				else{
@@ -230,24 +235,24 @@ public class Controller implements CS355Controller {
 				}
 			}
 			else if(!(curShape instanceof Line)){
-				double xValue = -4;
+				double xValue = -4/zoom;
 				double yValue = 0;
 				if(curShape instanceof Square){
-					yValue = -((Square) curShape).getSize()/2 -12;
+					yValue = -((Square) curShape).getSize()/2 - (12/zoom);
 				}
 				else if(curShape instanceof Rectangle){
-					yValue = 0 -((Rectangle) curShape).getHeight()/2 - 12;
+					yValue = 0 -((Rectangle) curShape).getHeight()/2 - (12/zoom);
 				}
 				else if(curShape instanceof Circle){
-					yValue = -(((Circle) curShape).getRadius()/2) -12;
+					yValue = -(((Circle) curShape).getRadius()/2) - (12/zoom);
 				}
 				else if(curShape instanceof Ellipse){
-					yValue = -(((Ellipse) curShape).getHeight()/2) -12;
+					yValue = -(((Ellipse) curShape).getHeight()/2) - (12/zoom);
 				}
 				
 				//java.awt.geom.Point2D.Double relativeClick = new java.awt.geom.Point2D.Double(click.getX() - curShape.getCenter().getX(), click.getY() - curShape.getCenter().getY());
 				
-				if(((transformedClick.getX() <= xValue+8) && (transformedClick.getX() >= xValue)) && ((transformedClick.getY() <= yValue+8) && (transformedClick.getY() >= yValue)) && !(curShape instanceof Line)){
+				if(((transformedClick.getX() <= xValue+(8/zoom)) && (transformedClick.getX() >= xValue)) && ((transformedClick.getY() <= yValue+(8/zoom)) && (transformedClick.getY() >= yValue)) && !(curShape instanceof Line)){
 					return true;
 				}
 				else{
@@ -271,6 +276,7 @@ public class Controller implements CS355Controller {
 	public void mouseDragged(MouseEvent e) {		
 		secondPoint = e.getPoint();
 			AffineTransform affineTransform = new AffineTransform();
+			affineTransform.concatenate(new AffineTransform(1,0,0,1,viewX,viewY));
 			affineTransform.concatenate(new AffineTransform(1/zoom,0,0,1/zoom,0,0));
 			affineTransform.transform(secondPoint, secondPoint);
 		if(curState == State.ROTATE){
@@ -422,7 +428,7 @@ public class Controller implements CS355Controller {
 
 	@Override
 	public void lineButtonHit() {
-		GUIFunctions.printf("");
+		//GUIFunctions.printf("");
 		curState = State.LINE;
 		curShape = null;
 		curShapeIndex = -1;
@@ -432,7 +438,7 @@ public class Controller implements CS355Controller {
 
 	@Override
 	public void squareButtonHit() {
-		GUIFunctions.printf("");
+		//GUIFunctions.printf("");
 		curState = State.SQUARE;
 		curShape = null;
 		curShapeIndex = -1;
@@ -442,7 +448,7 @@ public class Controller implements CS355Controller {
 
 	@Override
 	public void rectangleButtonHit() {
-		GUIFunctions.printf("");
+		//GUIFunctions.printf("");
 		curState = State.RECTANGLE;
 		curShape = null;
 		curShapeIndex = -1;
@@ -452,7 +458,7 @@ public class Controller implements CS355Controller {
 
 	@Override
 	public void circleButtonHit() {
-		GUIFunctions.printf("");
+		//GUIFunctions.printf("");
 		curState = State.CIRCLE;
 		curShape = null;
 		curShapeIndex = -1;
@@ -462,7 +468,7 @@ public class Controller implements CS355Controller {
 
 	@Override
 	public void ellipseButtonHit() {
-		GUIFunctions.printf("");
+		//GUIFunctions.printf("");
 		curState = State.ELLIPSE;
 		curShape = null;
 		curShapeIndex = -1;
@@ -473,7 +479,7 @@ public class Controller implements CS355Controller {
 	@Override
 	public void triangleButtonHit() {
 		curState = State.TRIANGLE1;
-		GUIFunctions.printf("CLICK FIRST POINT");
+		//GUIFunctions.printf("CLICK FIRST POINT");
 		curShape = null;
 		curShapeIndex = -1;
 		model.setShapeIndex(-1);
@@ -495,23 +501,32 @@ public class Controller implements CS355Controller {
 		if(zoom == .25){
 			GUIFunctions.setHScrollBarKnob(1000);
 			GUIFunctions.setVScrollBarKnob(1000);
+			GUIFunctions.setHScrollBarPosit(0);
+			GUIFunctions.setVScrollBarPosit(0);
 			zoom = .5;
 		}
 		else if(zoom == .5){
 			GUIFunctions.setHScrollBarKnob(500);
 			GUIFunctions.setVScrollBarKnob(500);
+			GUIFunctions.setHScrollBarPosit(0);
+			GUIFunctions.setVScrollBarPosit(0);
 			zoom = 1;
 		}
 		else if(zoom == 1){
 			GUIFunctions.setHScrollBarKnob(250);
 			GUIFunctions.setVScrollBarKnob(250);
+			GUIFunctions.setHScrollBarPosit(0);
+			GUIFunctions.setVScrollBarPosit(0);
 			zoom = 2;
 		}
 		else if(zoom == 2){
 			GUIFunctions.setHScrollBarKnob(125);
 			GUIFunctions.setVScrollBarKnob(125);
+			GUIFunctions.setHScrollBarPosit(0);
+			GUIFunctions.setVScrollBarPosit(0);
 			zoom = 4;
 		}
+		GUIFunctions.printf("Zoom Level: " + (zoom*100) + "%%");
 		view.setZoom(zoom);
 		model.updateAll();
 	}
@@ -521,23 +536,34 @@ public class Controller implements CS355Controller {
 		if(zoom == .5){
 			GUIFunctions.setHScrollBarKnob(2048);
 			GUIFunctions.setVScrollBarKnob(2048);
+			GUIFunctions.setHScrollBarPosit(0);
+			GUIFunctions.setVScrollBarPosit(0);
+			viewX = 0;
+			viewY = 0;
 			zoom = .25;
 		}
 		else if(zoom == 1){
 			GUIFunctions.setHScrollBarKnob(1000);
 			GUIFunctions.setVScrollBarKnob(1000);
+			GUIFunctions.setHScrollBarPosit(0);
+			GUIFunctions.setVScrollBarPosit(0);
 			zoom = .5;
 		}
 		else if(zoom == 2){
 			GUIFunctions.setHScrollBarKnob(500);
 			GUIFunctions.setVScrollBarKnob(500);
+			GUIFunctions.setHScrollBarPosit(0);
+			GUIFunctions.setVScrollBarPosit(0);
 			zoom = 1;
 		}
 		else if(zoom == 4){
 			GUIFunctions.setHScrollBarKnob(250);
 			GUIFunctions.setVScrollBarKnob(250);
+			GUIFunctions.setHScrollBarPosit(0);
+			GUIFunctions.setVScrollBarPosit(0);
 			zoom = 2;
 		}
+		GUIFunctions.printf("Zoom Level: " + Double.toString((zoom*100)) + "%%");
 		view.setZoom(zoom);
 		model.updateAll();
 	}
@@ -717,7 +743,7 @@ public class Controller implements CS355Controller {
 					returnShape = s;
 					curShapeIndex = stackedShapes.size() -1 - i;
 					model.setShapeIndex(curShapeIndex);
-					GUIFunctions.printf("CIRCLE SELECTED");
+					//GUIFunctions.printf("CIRCLE SELECTED");
 					shapeSelected = true;
 					break;
 				}
@@ -739,7 +765,7 @@ public class Controller implements CS355Controller {
 					returnShape = s;
 					curShapeIndex = stackedShapes.size() -1 - i;
 					model.setShapeIndex(curShapeIndex);
-					GUIFunctions.printf("SQUARE SELECTED");
+					//GUIFunctions.printf("SQUARE SELECTED");
 					shapeSelected = true;
 					break;
 				}
@@ -765,7 +791,7 @@ public class Controller implements CS355Controller {
 					returnShape = s;
 					curShapeIndex = stackedShapes.size() -1 - i;
 					model.setShapeIndex(curShapeIndex);
-					GUIFunctions.printf("ELLIPSE SELECTED");
+					//GUIFunctions.printf("ELLIPSE SELECTED");
 					shapeSelected = true;
 					break;
 				}
@@ -787,7 +813,7 @@ public class Controller implements CS355Controller {
 					returnShape = s;
 					curShapeIndex = stackedShapes.size() -1 - i;
 					model.setShapeIndex(curShapeIndex);
-					GUIFunctions.printf("RECTANGLE SELECTED");
+					//GUIFunctions.printf("RECTANGLE SELECTED");
 					shapeSelected = true;
 					break;
 				}
@@ -830,7 +856,7 @@ public class Controller implements CS355Controller {
 					returnShape = s;
 					curShapeIndex = stackedShapes.size() -1 - i;
 					model.setShapeIndex(curShapeIndex);
-					GUIFunctions.printf("LINE SELECTED");
+					//GUIFunctions.printf("LINE SELECTED");
 					shapeSelected = true;
 					break;
 				}
@@ -866,7 +892,7 @@ public class Controller implements CS355Controller {
 					returnShape = s;
 					curShapeIndex = stackedShapes.size() -1 - i;
 					model.setShapeIndex(curShapeIndex);
-					GUIFunctions.printf("TRIANGLE SELECTED");
+					//GUIFunctions.printf("TRIANGLE SELECTED");
 					shapeSelected = true;
 					break;
 				}
@@ -877,7 +903,7 @@ public class Controller implements CS355Controller {
 			curShapeIndex = -1;
 			model.setShapeIndex(curShapeIndex);
 			curShape = null;
-			GUIFunctions.printf("NO SHAPE SELECTED");
+			//GUIFunctions.printf("NO SHAPE SELECTED");
 		}
 		model.updateAll();
 		return returnShape;

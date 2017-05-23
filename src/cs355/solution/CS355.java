@@ -36,6 +36,7 @@ public class CS355 {
 		GUIFunctions.setVScrollBarKnob(500);
 		GUIFunctions.setHScrollBarMax(2048);
 		GUIFunctions.setVScrollBarMax(2048);
+		GUIFunctions.printf("Zoom Level: " + 100.0 + "%%");
 		GUIFunctions.refresh();
 	}
 }
