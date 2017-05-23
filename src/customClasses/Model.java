@@ -1,6 +1,5 @@
 package customClasses;
 
-import java.awt.geom.Point2D.Double;
 import java.util.Collections;
 import java.util.List;
 import java.util.Observer;

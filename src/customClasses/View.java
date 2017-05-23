@@ -2,8 +2,8 @@ package customClasses;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
 import java.util.Observable;
+import java.awt.geom.AffineTransform;
 
 import cs355.GUIFunctions;
 import cs355.model.drawing.*;

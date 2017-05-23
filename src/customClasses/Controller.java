@@ -1,21 +1,15 @@
 package customClasses;
 
+import java.io.File;
 import java.awt.Color;
+import java.util.List;
+import java.util.Iterator;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
-import java.io.File;
-import java.util.Iterator;
-import java.util.List;
 
 import cs355.GUIFunctions;
+import cs355.model.drawing.*;
 import cs355.controller.CS355Controller;
-import cs355.model.drawing.Circle;
-import cs355.model.drawing.Ellipse;
-import cs355.model.drawing.Line;
-import cs355.model.drawing.Rectangle;
-import cs355.model.drawing.Shape;
-import cs355.model.drawing.Square;
-import cs355.model.drawing.Triangle;
 
 public class Controller implements CS355Controller {
 
