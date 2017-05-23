@@ -57,29 +57,25 @@ public class Controller implements CS355Controller {
 	public void mouseClicked(MouseEvent e) {
 		if(curState == State.TRIANGLE1){
 			firstPoint = e.getPoint();
-				AffineTransform affineTransform = new AffineTransform();
-				affineTransform.concatenate(new AffineTransform(1,0,0,1,viewX,viewY));
-				affineTransform.concatenate(new AffineTransform(1/zoom,0,0,1/zoom,0,0));
-				affineTransform.transform(firstPoint, firstPoint);
+				AffineTransform aT = viewToWorld();
+				aT.transform(firstPoint, firstPoint);
 			curState = State.TRIANGLE2;
 			//GUIFunctions.printf("CLICK SECOND POINT");
 		}
 		else if(curState == State.TRIANGLE2){
 			secondPoint = e.getPoint();
-				AffineTransform affineTransform = new AffineTransform();
-				affineTransform.concatenate(new AffineTransform(1,0,0,1,viewX,viewY));
-				affineTransform.concatenate(new AffineTransform(1/zoom,0,0,1/zoom,0,0));
-				affineTransform.transform(secondPoint, secondPoint);
+			
+			AffineTransform aT = viewToWorld();
+			aT.transform(secondPoint, secondPoint);
+			
 			curState = State.TRIANGLE3;
 			//GUIFunctions.printf("CLICK THIRD POINT");
 		}
 		else if(curState == State.TRIANGLE3){
 			thirdPoint = e.getPoint();
 			
-			AffineTransform affineTransform = new AffineTransform();
-			affineTransform.concatenate(new AffineTransform(1,0,0,1,viewX,viewY));
-			affineTransform.concatenate(new AffineTransform(1/zoom,0,0,1/zoom,0,0));
-			affineTransform.transform(thirdPoint, thirdPoint);
+			AffineTransform aT = viewToWorld();
+			aT.transform(thirdPoint, thirdPoint);
 			
 			double centerX = (firstPoint.getX() + secondPoint.getX() + thirdPoint.getX())/3;
 			double centerY = (firstPoint.getY() + secondPoint.getY() + thirdPoint.getY())/3;
@@ -93,7 +89,6 @@ public class Controller implements CS355Controller {
 			model.addShape(tri);
 			model.updateAll();
 			curState = State.TRIANGLE1;
-			//GUIFunctions.printf("CLICK FIRST POINT");
 		}
 
 	}
@@ -114,17 +109,13 @@ public class Controller implements CS355Controller {
 	public void mousePressed(MouseEvent e) {
 		if(curState != State.TRIANGLE1 || curState != State.TRIANGLE2 || curState != State.TRIANGLE3 || curState != State.SELECT){
 			origin = e.getPoint();
-			AffineTransform affineTransform = new AffineTransform();
-			affineTransform.concatenate(new AffineTransform(1,0,0,1,viewX,viewY));
-			affineTransform.concatenate(new AffineTransform(1/zoom,0,0,1/zoom,0,0));
-			affineTransform.transform(origin, origin);
+			AffineTransform aT = viewToWorld();
+			aT.transform(origin, origin);
 		}
 		if(curState == State.SELECT){
 			click = e.getPoint();
-			AffineTransform affineTransform = new AffineTransform();
-			affineTransform.concatenate(new AffineTransform(1,0,0,1,viewX,viewY));
-			affineTransform.concatenate(new AffineTransform(1/zoom,0,0,1/zoom,0,0));
-			affineTransform.transform(click, click);
+			AffineTransform aT = viewToWorld();
+			aT.transform(click, click);
 
 			lineStartEdit = false;
 			lineEndEdit = false;	
@@ -214,11 +205,8 @@ public class Controller implements CS355Controller {
 		}
 		else{
 			java.awt.geom.Point2D.Double transformedClick = new java.awt.geom.Point2D.Double(0,0);
-			AffineTransform affineTransform = new AffineTransform();
-			affineTransform.concatenate(new AffineTransform(Math.cos(curShape.getRotation()), -Math.sin(curShape.getRotation()), Math.sin(curShape.getRotation()), Math.cos(curShape.getRotation()), 0,0));
-			affineTransform.concatenate(new AffineTransform(1,0,0,1,-curShape.getCenter().getX(), -curShape.getCenter().getY()));
-			//affineTransform.concatenate(new AffineTransform(1/zoom,0,0,1/zoom,0,0));
-			affineTransform.transform(click, transformedClick);
+			AffineTransform aT = worldToObj(curShape);
+			aT.transform(click, transformedClick);
 			
 			if(curShape instanceof Triangle){
 				Triangle tri = (Triangle)curShape;
@@ -271,10 +259,8 @@ public class Controller implements CS355Controller {
 	@Override
 	public void mouseDragged(MouseEvent e) {		
 		secondPoint = e.getPoint();
-			AffineTransform affineTransform = new AffineTransform();
-			affineTransform.concatenate(new AffineTransform(1,0,0,1,viewX,viewY));
-			affineTransform.concatenate(new AffineTransform(1/zoom,0,0,1/zoom,0,0));
-			affineTransform.transform(secondPoint, secondPoint);
+		AffineTransform aT = viewToWorld();
+		aT.transform(secondPoint, secondPoint);
 		if(curState == State.ROTATE){
 			
 			java.awt.geom.Point2D.Double u = new java.awt.geom.Point2D.Double(click.getX() - curShape.getCenter().getX(), click.getY() - curShape.getCenter().getY());
@@ -719,10 +705,8 @@ public class Controller implements CS355Controller {
 				Circle circle = (Circle) s;
 				
 				java.awt.geom.Point2D.Double transformedClick = new java.awt.geom.Point2D.Double(0,0);
-				AffineTransform affineTransform = new AffineTransform();
-				affineTransform.concatenate(new AffineTransform(Math.cos(s.getRotation()), -Math.sin(s.getRotation()), Math.sin(s.getRotation()), Math.cos(s.getRotation()), 0,0));
-				affineTransform.concatenate(new AffineTransform(1,0,0,1,-s.getCenter().getX(), -s.getCenter().getY()));
-				affineTransform.transform(click, transformedClick);
+				AffineTransform aT = worldToObj(s);
+				aT.transform(click, transformedClick);
 				
 				double finalCompare = Math.pow(transformedClick.getX(), 2) + Math.pow(transformedClick.getY(), 2);
 				if(finalCompare <= Math.pow(circle.getRadius()/2, 2)){
@@ -737,11 +721,8 @@ public class Controller implements CS355Controller {
 				Square square = (Square) s;
 				
 				java.awt.geom.Point2D.Double transformedClick = new java.awt.geom.Point2D.Double(0,0);
-				AffineTransform affineTransform = new AffineTransform();
-				affineTransform.concatenate(new AffineTransform(Math.cos(s.getRotation()), -Math.sin(s.getRotation()), Math.sin(s.getRotation()), Math.cos(s.getRotation()), 0,0));
-				affineTransform.concatenate(new AffineTransform(1,0,0,1,-s.getCenter().getX(), -s.getCenter().getY()));
-				//affineTransform.concatenate(new AffineTransform(1/zoom,0,0,1/zoom,0,0));
-				affineTransform.transform(click, transformedClick);
+				AffineTransform aT = worldToObj(s);
+				aT.transform(click, transformedClick);
 				
 				java.awt.geom.Point2D.Double UL = new java.awt.geom.Point2D.Double(-(square.getSize()/2), -(square.getSize()/2));
 				boolean horizCheck = (transformedClick.getX() > UL.getX()) && (transformedClick.getX() < (UL.getX()+square.getSize()));
@@ -759,10 +740,8 @@ public class Controller implements CS355Controller {
 				java.awt.geom.Point2D.Double center = new java.awt.geom.Point2D.Double(0, 0);
 				
 				java.awt.geom.Point2D.Double transformedClick = new java.awt.geom.Point2D.Double(0,0);
-				AffineTransform affineTransform = new AffineTransform();
-				affineTransform.concatenate(new AffineTransform(Math.cos(s.getRotation()), -Math.sin(s.getRotation()), Math.sin(s.getRotation()), Math.cos(s.getRotation()), 0,0));
-				affineTransform.concatenate(new AffineTransform(1,0,0,1,-s.getCenter().getX(), -s.getCenter().getY()));
-				affineTransform.transform(click, transformedClick);
+				AffineTransform aT = worldToObj(s);
+				aT.transform(click, transformedClick);
 				
 				double a = ellipse.getWidth()/2;
 				double b = ellipse.getHeight()/2;
@@ -781,10 +760,8 @@ public class Controller implements CS355Controller {
 				Rectangle rect = (Rectangle) s;
 				
 				java.awt.geom.Point2D.Double transformedClick = new java.awt.geom.Point2D.Double(0,0);
-				AffineTransform affineTransform = new AffineTransform();
-				affineTransform.concatenate(new AffineTransform(Math.cos(s.getRotation()), -Math.sin(s.getRotation()), Math.sin(s.getRotation()), Math.cos(s.getRotation()), 0,0));
-				affineTransform.concatenate(new AffineTransform(1,0,0,1,-s.getCenter().getX(), -s.getCenter().getY()));
-				affineTransform.transform(click, transformedClick);
+				AffineTransform aT = worldToObj(s);
+				aT.transform(click, transformedClick);
 					
 				java.awt.geom.Point2D.Double UL = new java.awt.geom.Point2D.Double(-(rect.getWidth()/2), -(rect.getHeight()/2));
 				boolean horizCheck = (transformedClick.getX() > UL.getX()) && (transformedClick.getX() < (UL.getX()+rect.getWidth()));
@@ -803,10 +780,8 @@ public class Controller implements CS355Controller {
 				java.awt.geom.Point2D.Double p1 = line.getEnd();
 				
 				java.awt.geom.Point2D.Double transformedClick = new java.awt.geom.Point2D.Double(0,0);
-				AffineTransform affineTransform = new AffineTransform();
-				affineTransform.concatenate(new AffineTransform(Math.cos(s.getRotation()), -Math.sin(s.getRotation()), Math.sin(s.getRotation()), Math.cos(s.getRotation()), 0,0));
-				affineTransform.concatenate(new AffineTransform(1,0,0,1,-s.getCenter().getX(), -s.getCenter().getY()));
-				affineTransform.transform(click, transformedClick);
+				AffineTransform aT = worldToObj(s);
+				aT.transform(click, transformedClick);
 				
 				p0 = new java.awt.geom.Point2D.Double(p0.getX()+0, p0.getY()+0);
 				p1 = new java.awt.geom.Point2D.Double(p1.getX()+0, p1.getY()+0);
@@ -841,10 +816,8 @@ public class Controller implements CS355Controller {
 				Triangle tri = (Triangle) s;
 				
 				java.awt.geom.Point2D.Double transformedClick = new java.awt.geom.Point2D.Double(0,0);
-				AffineTransform affineTransform = new AffineTransform();
-				affineTransform.concatenate(new AffineTransform(Math.cos(s.getRotation()), -Math.sin(s.getRotation()), Math.sin(s.getRotation()), Math.cos(s.getRotation()), 0,0));
-				affineTransform.concatenate(new AffineTransform(1,0,0,1,-s.getCenter().getX(), -s.getCenter().getY()));
-				affineTransform.transform(click, transformedClick);
+				AffineTransform aT = worldToObj(s);
+				aT.transform(click, transformedClick);
 				
 				java.awt.geom.Point2D.Double center = new java.awt.geom.Point2D.Double(0,0);
 				java.awt.geom.Point2D.Double A = new java.awt.geom.Point2D.Double(tri.getA().getX() + center.getX(), tri.getA().getY() + center.getY());
@@ -877,10 +850,22 @@ public class Controller implements CS355Controller {
 			curShapeIndex = -1;
 			model.setShapeIndex(curShapeIndex);
 			curShape = null;
-			//GUIFunctions.printf("NO SHAPE SELECTED");
 		}
 		model.updateAll();
 		return returnShape;
 	}
-
+	
+	public AffineTransform viewToWorld(){
+		AffineTransform aT = new AffineTransform();
+		aT.concatenate(new AffineTransform(1,0,0,1,viewX,viewY));
+		aT.concatenate(new AffineTransform(1/zoom,0,0,1/zoom,0,0));
+		return aT;
+	}
+	
+	public AffineTransform worldToObj(Shape curShape){
+		AffineTransform aT = new AffineTransform();
+		aT.concatenate(new AffineTransform(Math.cos(curShape.getRotation()), -Math.sin(curShape.getRotation()), Math.sin(curShape.getRotation()), Math.cos(curShape.getRotation()), 0,0));
+		aT.concatenate(new AffineTransform(1,0,0,1,-curShape.getCenter().getX(), -curShape.getCenter().getY()));
+		return aT;
+	}
 }

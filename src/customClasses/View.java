@@ -36,13 +36,9 @@ public class View implements ViewRefresher {
 			boolean curSelect = (model.getShapeIndex() == i);
 			if(shape instanceof Line){
 				Line line = (Line)shape; 
-				AffineTransform objToWorld = new AffineTransform();
-				objToWorld.concatenate(new AffineTransform(zoom,0,0,zoom,0,0));
-				objToWorld.concatenate(new AffineTransform(1,0,0,1,-viewPort.getX(),-viewPort.getY()));
-				objToWorld.concatenate(new AffineTransform(1,0,0,1,shape.getCenter().getX(), shape.getCenter().getY()));
-				objToWorld.concatenate(new AffineTransform(Math.cos(shape.getRotation()), Math.sin(shape.getRotation()), -Math.sin(shape.getRotation()), Math.cos(shape.getRotation()), 0,0));
-				g2d.setTransform(objToWorld);
-				g2d.setColor(line.getColor());
+				AffineTransform aT = objToView(shape);
+				g2d.setTransform(aT);
+				g2d.setColor(shape.getColor());
 				g2d.drawLine((int)line.getStart().getX(), (int)line.getStart().getY(), (int)line.getEnd().getX(), (int)line.getEnd().getY());
 				if(curSelect){
 					curShape = shape;
@@ -51,12 +47,8 @@ public class View implements ViewRefresher {
 			}
 			else if(shape instanceof Ellipse){
 				Ellipse ellipse = (Ellipse) shape;
-				AffineTransform objToWorld = new AffineTransform();
-				objToWorld.concatenate(new AffineTransform(zoom,0,0,zoom,0,0));
-				objToWorld.concatenate(new AffineTransform(1,0,0,1,-viewPort.getX(),-viewPort.getY()));
-				objToWorld.concatenate(new AffineTransform(1,0,0,1,shape.getCenter().getX(), shape.getCenter().getY()));
-				objToWorld.concatenate(new AffineTransform(Math.cos(shape.getRotation()), Math.sin(shape.getRotation()), -Math.sin(shape.getRotation()), Math.cos(shape.getRotation()), 0,0));
-				g2d.setTransform(objToWorld);
+				AffineTransform aT = objToView(shape);
+				g2d.setTransform(aT);
 				g2d.setColor(ellipse.getColor());
 				g2d.fillOval((int)(0 - ellipse.getWidth()/2), (int)(0 - ellipse.getHeight()/2), (int)ellipse.getWidth(), (int)ellipse.getHeight());
 				if(curSelect){
@@ -66,12 +58,8 @@ public class View implements ViewRefresher {
 			}
 			else if(shape instanceof Circle){
 				Circle circle = (Circle) shape;
-				AffineTransform objToWorld = new AffineTransform();
-				objToWorld.concatenate(new AffineTransform(zoom,0,0,zoom,0,0));
-				objToWorld.concatenate(new AffineTransform(1,0,0,1,-viewPort.getX(),-viewPort.getY()));
-				objToWorld.concatenate(new AffineTransform(1,0,0,1,shape.getCenter().getX(), shape.getCenter().getY()));
-				objToWorld.concatenate(new AffineTransform(Math.cos(shape.getRotation()), Math.sin(shape.getRotation()), -Math.sin(shape.getRotation()), Math.cos(shape.getRotation()), 0,0));
-				g2d.setTransform(objToWorld);
+				AffineTransform aT = objToView(shape);
+				g2d.setTransform(aT);
 				g2d.setColor(circle.getColor());
 				g2d.fillOval((int)(0-circle.getRadius()/2), (int)(0-circle.getRadius()/2), (int)circle.getRadius(), (int)circle.getRadius());
 				if(curSelect){
@@ -84,12 +72,8 @@ public class View implements ViewRefresher {
 				java.awt.geom.Point2D.Double UL = new java.awt.geom.Point2D.Double(0-(rect.getWidth()/2), 0-(rect.getHeight()/2));
 				int[] xPoints = {(int)UL.getX(), (int)(UL.getX() + rect.getWidth()), (int)(UL.getX() + rect.getWidth()), (int)UL.getX()};
 				int[] yPoints = {(int)UL.getY(), (int)UL.getY(), (int)(UL.getY() + rect.getHeight()), (int)(UL.getY() + rect.getHeight())};
-				AffineTransform objToWorld = new AffineTransform();
-				objToWorld.concatenate(new AffineTransform(zoom,0,0,zoom,0,0));
-				objToWorld.concatenate(new AffineTransform(1,0,0,1,-viewPort.getX(),-viewPort.getY()));
-				objToWorld.concatenate(new AffineTransform(1,0,0,1,shape.getCenter().getX(), shape.getCenter().getY()));
-				objToWorld.concatenate(new AffineTransform(Math.cos(shape.getRotation()), Math.sin(shape.getRotation()), -Math.sin(shape.getRotation()), Math.cos(shape.getRotation()), 0,0));
-				g2d.setTransform(objToWorld);
+				AffineTransform aT = objToView(shape);
+				g2d.setTransform(aT);
 				g2d.setColor(rect.getColor());
 				g2d.fillPolygon(xPoints, yPoints, 4);
 				if(curSelect){
@@ -102,12 +86,8 @@ public class View implements ViewRefresher {
 				java.awt.geom.Point2D.Double UL = new java.awt.geom.Point2D.Double(0-(square.getSize()/2), 0-(square.getSize()/2));
 				int[] xPoints = {(int)UL.getX(), (int)(UL.getX() + square.getSize()),(int)(UL.getX() + square.getSize()), (int)UL.getX()};
 				int[] yPoints = {(int)UL.getY(), (int)UL.getY(), (int)(UL.getY() + square.getSize()), (int)(UL.getY() + square.getSize())};
-				AffineTransform objToWorld = new AffineTransform();
-				objToWorld.concatenate(new AffineTransform(zoom,0,0,zoom,0,0));
-				objToWorld.concatenate(new AffineTransform(1,0,0,1,-viewPort.getX(),-viewPort.getY()));
-				objToWorld.concatenate(new AffineTransform(1,0,0,1,shape.getCenter().getX(), shape.getCenter().getY()));
-				objToWorld.concatenate(new AffineTransform(Math.cos(shape.getRotation()), Math.sin(shape.getRotation()), -Math.sin(shape.getRotation()), Math.cos(shape.getRotation()), 0,0));
-				g2d.setTransform(objToWorld);
+				AffineTransform aT = objToView(shape);
+				g2d.setTransform(aT);
 				g2d.setColor(square.getColor());
 				g2d.fillPolygon(xPoints, yPoints, 4);
 				if(curSelect){
@@ -119,12 +99,8 @@ public class View implements ViewRefresher {
 				Triangle tri = (Triangle) shape;
 				int[] xPoints = {(int)(tri.getA().getX()), (int)(tri.getB().getX()), (int)(tri.getC().getX())};
 				int[] yPoints = {(int)(tri.getA().getY()), (int)(tri.getB().getY()), (int)(tri.getC().getY())};
-				AffineTransform objToWorld = new AffineTransform();
-				objToWorld.concatenate(new AffineTransform(zoom,0,0,zoom,0,0));
-				objToWorld.concatenate(new AffineTransform(1,0,0,1,-viewPort.getX(),-viewPort.getY()));
-				objToWorld.concatenate(new AffineTransform(1,0,0,1,shape.getCenter().getX(), shape.getCenter().getY()));
-				objToWorld.concatenate(new AffineTransform(Math.cos(shape.getRotation()), Math.sin(shape.getRotation()), -Math.sin(shape.getRotation()), Math.cos(shape.getRotation()), 0,0));
-				g2d.setTransform(objToWorld);
+				AffineTransform aT = objToView(shape);
+				g2d.setTransform(aT);
 				g2d.setColor(tri.getColor());
 				g2d.fillPolygon(xPoints, yPoints, 3);
 				if(curSelect){
@@ -140,12 +116,8 @@ public class View implements ViewRefresher {
 				curColor = Color.RED;
 			}
 			g2d.setColor(curColor);
-			AffineTransform objToWorld = new AffineTransform();
-			objToWorld.concatenate(new AffineTransform(zoom,0,0,zoom,0,0));
-			objToWorld.concatenate(new AffineTransform(1,0,0,1,-viewPort.getX(),-viewPort.getY()));
-			objToWorld.concatenate(new AffineTransform(1,0,0,1,curShape.getCenter().getX(), curShape.getCenter().getY()));
-			objToWorld.concatenate(new AffineTransform(Math.cos(curShape.getRotation()), Math.sin(curShape.getRotation()), -Math.sin(curShape.getRotation()), Math.cos(curShape.getRotation()), 0,0));
-			g2d.setTransform(objToWorld);
+			AffineTransform aT = objToView(curShape);
+			g2d.setTransform(aT);
 			switch(outlineType){
 				case "LINE":
 					Line line = (Line)curShape; 
@@ -206,6 +178,15 @@ public class View implements ViewRefresher {
 	
 	public void setZoom(double newZoom){
 		zoom = newZoom;
+	}
+	
+	public AffineTransform objToView(Shape curShape){
+		AffineTransform aT = new AffineTransform();
+		aT.concatenate(new AffineTransform(zoom,0,0,zoom,0,0));
+		aT.concatenate(new AffineTransform(1,0,0,1,-viewPort.getX(),-viewPort.getY()));
+		aT.concatenate(new AffineTransform(1,0,0,1,curShape.getCenter().getX(), curShape.getCenter().getY()));
+		aT.concatenate(new AffineTransform(Math.cos(curShape.getRotation()), Math.sin(curShape.getRotation()), -Math.sin(curShape.getRotation()), Math.cos(curShape.getRotation()), 0,0));
+		return aT;
 	}
 
 }
