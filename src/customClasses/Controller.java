@@ -493,23 +493,23 @@ public class Controller implements CS355Controller {
 	@Override
 	public void zoomInButtonHit() {
 		if(zoom == .25){
-			GUIFunctions.setHScrollBarMax(250);
-			GUIFunctions.setVScrollBarMax(250);
+			GUIFunctions.setHScrollBarKnob(1000);
+			GUIFunctions.setVScrollBarKnob(1000);
 			zoom = .5;
 		}
 		else if(zoom == .5){
-			GUIFunctions.setHScrollBarMax(500);
-			GUIFunctions.setVScrollBarMax(500);
+			GUIFunctions.setHScrollBarKnob(500);
+			GUIFunctions.setVScrollBarKnob(500);
 			zoom = 1;
 		}
 		else if(zoom == 1){
-			GUIFunctions.setHScrollBarMax(1000);
-			GUIFunctions.setVScrollBarMax(1000);
+			GUIFunctions.setHScrollBarKnob(250);
+			GUIFunctions.setVScrollBarKnob(250);
 			zoom = 2;
 		}
 		else if(zoom == 2){
-			GUIFunctions.setHScrollBarMax(2000);
-			GUIFunctions.setVScrollBarMax(2000);
+			GUIFunctions.setHScrollBarKnob(125);
+			GUIFunctions.setVScrollBarKnob(125);
 			zoom = 4;
 		}
 		view.setZoom(zoom);
@@ -519,23 +519,23 @@ public class Controller implements CS355Controller {
 	@Override
 	public void zoomOutButtonHit() {
 		if(zoom == .5){
-			GUIFunctions.setHScrollBarMax(125);
-			GUIFunctions.setVScrollBarMax(125);
+			GUIFunctions.setHScrollBarKnob(2048);
+			GUIFunctions.setVScrollBarKnob(2048);
 			zoom = .25;
 		}
 		else if(zoom == 1){
-			GUIFunctions.setHScrollBarMax(250);
-			GUIFunctions.setVScrollBarMax(250);
+			GUIFunctions.setHScrollBarKnob(1000);
+			GUIFunctions.setVScrollBarKnob(1000);
 			zoom = .5;
 		}
 		else if(zoom == 2){
-			GUIFunctions.setHScrollBarMax(500);
-			GUIFunctions.setVScrollBarMax(500);
+			GUIFunctions.setHScrollBarKnob(500);
+			GUIFunctions.setVScrollBarKnob(500);
 			zoom = 1;
 		}
 		else if(zoom == 4){
-			GUIFunctions.setHScrollBarMax(1000);
-			GUIFunctions.setVScrollBarMax(1000);
+			GUIFunctions.setHScrollBarKnob(250);
+			GUIFunctions.setVScrollBarKnob(250);
 			zoom = 2;
 		}
 		view.setZoom(zoom);
