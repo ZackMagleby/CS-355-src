@@ -249,9 +249,7 @@ public class Controller implements CS355Controller {
 				else if(curShape instanceof Ellipse){
 					yValue = -(((Ellipse) curShape).getHeight()/2) - (12/zoom);
 				}
-				
-				//java.awt.geom.Point2D.Double relativeClick = new java.awt.geom.Point2D.Double(click.getX() - curShape.getCenter().getX(), click.getY() - curShape.getCenter().getY());
-				
+							
 				if(((transformedClick.getX() <= xValue+(8/zoom)) && (transformedClick.getX() >= xValue)) && ((transformedClick.getY() <= yValue+(8/zoom)) && (transformedClick.getY() >= yValue)) && !(curShape instanceof Line)){
 					return true;
 				}
@@ -268,8 +266,6 @@ public class Controller implements CS355Controller {
 		if(curState == State.ROTATE){
 			curState = State.SELECT;
 		}
-		//lineStartEdit = false;
-		//lineEndEdit = false;
 	}
 
 	@Override
@@ -398,9 +394,6 @@ public class Controller implements CS355Controller {
 				}
 				else{
 					java.awt.geom.Point2D.Double drag = new java.awt.geom.Point2D.Double(relativePoint.getX() + (secondPoint.getX()-click.getX()), relativePoint.getY() + (secondPoint.getY()-click.getY()));
-//					AffineTransform aT = new AffineTransform();
-//					aT.concatenate(new AffineTransform(zoom,0,0,zoom,0,0));
-//					aT.transform(drag, drag);
 					curShape.setCenter(drag);
 					model.updateAll();					
 				}
@@ -428,7 +421,6 @@ public class Controller implements CS355Controller {
 
 	@Override
 	public void lineButtonHit() {
-		//GUIFunctions.printf("");
 		curState = State.LINE;
 		curShape = null;
 		curShapeIndex = -1;
@@ -438,7 +430,6 @@ public class Controller implements CS355Controller {
 
 	@Override
 	public void squareButtonHit() {
-		//GUIFunctions.printf("");
 		curState = State.SQUARE;
 		curShape = null;
 		curShapeIndex = -1;
@@ -448,7 +439,6 @@ public class Controller implements CS355Controller {
 
 	@Override
 	public void rectangleButtonHit() {
-		//GUIFunctions.printf("");
 		curState = State.RECTANGLE;
 		curShape = null;
 		curShapeIndex = -1;
@@ -458,7 +448,6 @@ public class Controller implements CS355Controller {
 
 	@Override
 	public void circleButtonHit() {
-		//GUIFunctions.printf("");
 		curState = State.CIRCLE;
 		curShape = null;
 		curShapeIndex = -1;
@@ -468,7 +457,6 @@ public class Controller implements CS355Controller {
 
 	@Override
 	public void ellipseButtonHit() {
-		//GUIFunctions.printf("");
 		curState = State.ELLIPSE;
 		curShape = null;
 		curShapeIndex = -1;
@@ -479,7 +467,6 @@ public class Controller implements CS355Controller {
 	@Override
 	public void triangleButtonHit() {
 		curState = State.TRIANGLE1;
-		//GUIFunctions.printf("CLICK FIRST POINT");
 		curShape = null;
 		curShapeIndex = -1;
 		model.setShapeIndex(-1);
@@ -735,7 +722,6 @@ public class Controller implements CS355Controller {
 				AffineTransform affineTransform = new AffineTransform();
 				affineTransform.concatenate(new AffineTransform(Math.cos(s.getRotation()), -Math.sin(s.getRotation()), Math.sin(s.getRotation()), Math.cos(s.getRotation()), 0,0));
 				affineTransform.concatenate(new AffineTransform(1,0,0,1,-s.getCenter().getX(), -s.getCenter().getY()));
-				//affineTransform.concatenate(new AffineTransform(1/zoom,0,0,1/zoom,0,0));
 				affineTransform.transform(click, transformedClick);
 				
 				double finalCompare = Math.pow(transformedClick.getX(), 2) + Math.pow(transformedClick.getY(), 2);
@@ -743,7 +729,6 @@ public class Controller implements CS355Controller {
 					returnShape = s;
 					curShapeIndex = stackedShapes.size() -1 - i;
 					model.setShapeIndex(curShapeIndex);
-					//GUIFunctions.printf("CIRCLE SELECTED");
 					shapeSelected = true;
 					break;
 				}
@@ -765,7 +750,6 @@ public class Controller implements CS355Controller {
 					returnShape = s;
 					curShapeIndex = stackedShapes.size() -1 - i;
 					model.setShapeIndex(curShapeIndex);
-					//GUIFunctions.printf("SQUARE SELECTED");
 					shapeSelected = true;
 					break;
 				}
@@ -773,13 +757,11 @@ public class Controller implements CS355Controller {
 			else if(s instanceof Ellipse){
 				Ellipse ellipse = (Ellipse) s;
 				java.awt.geom.Point2D.Double center = new java.awt.geom.Point2D.Double(0, 0);
-				//java.awt.geom.Point2D.Double center = ellipse.getCenter();
 				
 				java.awt.geom.Point2D.Double transformedClick = new java.awt.geom.Point2D.Double(0,0);
 				AffineTransform affineTransform = new AffineTransform();
 				affineTransform.concatenate(new AffineTransform(Math.cos(s.getRotation()), -Math.sin(s.getRotation()), Math.sin(s.getRotation()), Math.cos(s.getRotation()), 0,0));
 				affineTransform.concatenate(new AffineTransform(1,0,0,1,-s.getCenter().getX(), -s.getCenter().getY()));
-				//affineTransform.concatenate(new AffineTransform(1/zoom,0,0,1/zoom,0,0));
 				affineTransform.transform(click, transformedClick);
 				
 				double a = ellipse.getWidth()/2;
@@ -791,7 +773,6 @@ public class Controller implements CS355Controller {
 					returnShape = s;
 					curShapeIndex = stackedShapes.size() -1 - i;
 					model.setShapeIndex(curShapeIndex);
-					//GUIFunctions.printf("ELLIPSE SELECTED");
 					shapeSelected = true;
 					break;
 				}
@@ -803,7 +784,6 @@ public class Controller implements CS355Controller {
 				AffineTransform affineTransform = new AffineTransform();
 				affineTransform.concatenate(new AffineTransform(Math.cos(s.getRotation()), -Math.sin(s.getRotation()), Math.sin(s.getRotation()), Math.cos(s.getRotation()), 0,0));
 				affineTransform.concatenate(new AffineTransform(1,0,0,1,-s.getCenter().getX(), -s.getCenter().getY()));
-				//affineTransform.concatenate(new AffineTransform(1/zoom,0,0,1/zoom,0,0));
 				affineTransform.transform(click, transformedClick);
 					
 				java.awt.geom.Point2D.Double UL = new java.awt.geom.Point2D.Double(-(rect.getWidth()/2), -(rect.getHeight()/2));
@@ -813,13 +793,11 @@ public class Controller implements CS355Controller {
 					returnShape = s;
 					curShapeIndex = stackedShapes.size() -1 - i;
 					model.setShapeIndex(curShapeIndex);
-					//GUIFunctions.printf("RECTANGLE SELECTED");
 					shapeSelected = true;
 					break;
 				}
 			}
 			else if(s instanceof Line){
-				//Slide 8 Parametric DIstance to Line
 				Line line = (Line) s;
 				java.awt.geom.Point2D.Double p0 = line.getStart();
 				java.awt.geom.Point2D.Double p1 = line.getEnd();
@@ -828,7 +806,6 @@ public class Controller implements CS355Controller {
 				AffineTransform affineTransform = new AffineTransform();
 				affineTransform.concatenate(new AffineTransform(Math.cos(s.getRotation()), -Math.sin(s.getRotation()), Math.sin(s.getRotation()), Math.cos(s.getRotation()), 0,0));
 				affineTransform.concatenate(new AffineTransform(1,0,0,1,-s.getCenter().getX(), -s.getCenter().getY()));
-				//affineTransform.concatenate(new AffineTransform(1/zoom,0,0,1/zoom,0,0));
 				affineTransform.transform(click, transformedClick);
 				
 				p0 = new java.awt.geom.Point2D.Double(p0.getX()+0, p0.getY()+0);
@@ -856,7 +833,6 @@ public class Controller implements CS355Controller {
 					returnShape = s;
 					curShapeIndex = stackedShapes.size() -1 - i;
 					model.setShapeIndex(curShapeIndex);
-					//GUIFunctions.printf("LINE SELECTED");
 					shapeSelected = true;
 					break;
 				}
@@ -868,7 +844,6 @@ public class Controller implements CS355Controller {
 				AffineTransform affineTransform = new AffineTransform();
 				affineTransform.concatenate(new AffineTransform(Math.cos(s.getRotation()), -Math.sin(s.getRotation()), Math.sin(s.getRotation()), Math.cos(s.getRotation()), 0,0));
 				affineTransform.concatenate(new AffineTransform(1,0,0,1,-s.getCenter().getX(), -s.getCenter().getY()));
-				//affineTransform.concatenate(new AffineTransform(1/zoom,0,0,1/zoom,0,0));
 				affineTransform.transform(click, transformedClick);
 				
 				java.awt.geom.Point2D.Double center = new java.awt.geom.Point2D.Double(0,0);
@@ -892,7 +867,6 @@ public class Controller implements CS355Controller {
 					returnShape = s;
 					curShapeIndex = stackedShapes.size() -1 - i;
 					model.setShapeIndex(curShapeIndex);
-					//GUIFunctions.printf("TRIANGLE SELECTED");
 					shapeSelected = true;
 					break;
 				}
