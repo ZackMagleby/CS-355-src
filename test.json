@@ -1,81 +1,194 @@
 [
   {
-    "a": {
-      "x": -198.66666666666669,
-      "y": 17.333333333333343
-    },
-    "b": {
-      "x": 94.33333333333331,
-      "y": -111.66666666666666
-    },
-    "c": {
-      "x": 104.33333333333331,
-      "y": 94.33333333333334
-    },
+    "radius": 140.0,
     "color": {
-      "value": -39271,
+      "value": -1,
       "falpha": 0.0
     },
     "center": {
-      "x": 361.6666666666667,
-      "y": 270.66666666666663
+      "x": 130.0,
+      "y": 154.0
     },
-    "rotation": 4.026319217705212,
+    "rotation": 0.0,
+    "SHAPE_TYPE": "cs355.model.drawing.Circle"
+  },
+  {
+    "radius": 472.0,
+    "color": {
+      "value": -1,
+      "falpha": 0.0
+    },
+    "center": {
+      "x": 692.0,
+      "y": 348.0
+    },
+    "rotation": 0.0,
+    "SHAPE_TYPE": "cs355.model.drawing.Circle"
+  },
+  {
+    "a": {
+      "x": -157.33333333333326,
+      "y": -370.6666666666667
+    },
+    "b": {
+      "x": -281.33333333333326,
+      "y": 177.33333333333331
+    },
+    "c": {
+      "x": 438.66666666666674,
+      "y": 193.33333333333331
+    },
+    "color": {
+      "value": -1,
+      "falpha": 0.0
+    },
+    "center": {
+      "x": 1375.3333333333333,
+      "y": 474.66666666666674
+    },
+    "rotation": -0.8721038852235803,
     "SHAPE_TYPE": "cs355.model.drawing.Triangle"
   },
   {
-    "width": 234.0,
-    "height": 157.0,
+    "end": {
+      "x": -516.3127759297681,
+      "y": 387.3818842502525
+    },
+    "start": {
+      "x": 1191.6872240702319,
+      "y": 255.38188425025248
+    },
     "color": {
-      "value": -16763956,
+      "value": -6750004,
       "falpha": 0.0
     },
     "center": {
-      "x": 146.0,
-      "y": 235.5
+      "x": 664.3127759297681,
+      "y": 456.6181157497475
     },
     "rotation": 0.0,
-    "SHAPE_TYPE": "cs355.model.drawing.Ellipse"
+    "SHAPE_TYPE": "cs355.model.drawing.Line"
   },
   {
-    "width": 0.0,
-    "height": 0.0,
+    "width": 4.0,
+    "height": 4.0,
     "color": {
-      "value": -39271,
+      "value": -1,
       "falpha": 0.0
     },
     "center": {
-      "x": 59.0,
-      "y": 387.0
+      "x": 247.0,
+      "y": 935.0
     },
-    "rotation": 0.0,
-    "SHAPE_TYPE": "cs355.model.drawing.Ellipse"
-  },
-  {
-    "width": 123.0,
-    "height": 89.0,
-    "color": {
-      "value": -10027111,
-      "falpha": 0.0
-    },
-    "center": {
-      "x": 246.5,
-      "y": 213.5
-    },
-    "rotation": 3.58302169726388,
+    "rotation": -1.1441688336680205,
     "SHAPE_TYPE": "cs355.model.drawing.Rectangle"
   },
   {
-    "size": 108.0,
+    "width": 188.0,
+    "height": 652.0,
     "color": {
-      "value": -13382656,
+      "value": -1,
       "falpha": 0.0
     },
     "center": {
-      "x": 282.0,
-      "y": 143.0
+      "x": 354.0,
+      "y": 1282.0
     },
-    "rotation": -0.08314123188844147,
-    "SHAPE_TYPE": "cs355.model.drawing.Square"
+    "rotation": -0.3469390244766086,
+    "SHAPE_TYPE": "cs355.model.drawing.Rectangle"
+  },
+  {
+    "width": 1228.0,
+    "height": 660.0,
+    "color": {
+      "value": -1,
+      "falpha": 0.0
+    },
+    "center": {
+      "x": 1286.0,
+      "y": 1162.0
+    },
+    "rotation": -0.5933501461567183,
+    "SHAPE_TYPE": "cs355.model.drawing.Ellipse"
+  },
+  {
+    "width": 440.0,
+    "height": 172.0,
+    "color": {
+      "value": -1,
+      "falpha": 0.0
+    },
+    "center": {
+      "x": 604.0,
+      "y": 734.0
+    },
+    "rotation": 0.0,
+    "SHAPE_TYPE": "cs355.model.drawing.Rectangle"
+  },
+  {
+    "a": {
+      "x": -176.0,
+      "y": -245.33333333333326
+    },
+    "b": {
+      "x": -188.0,
+      "y": 122.66666666666674
+    },
+    "c": {
+      "x": 364.0,
+      "y": 122.66666666666674
+    },
+    "color": {
+      "value": -1,
+      "falpha": 0.0
+    },
+    "center": {
+      "x": 808.0,
+      "y": 1705.3333333333333
+    },
+    "rotation": 0.28717314623845436,
+    "SHAPE_TYPE": "cs355.model.drawing.Triangle"
+  },
+  {
+    "width": 496.0,
+    "height": 372.0,
+    "color": {
+      "value": -1,
+      "falpha": 0.0
+    },
+    "center": {
+      "x": 1620.0,
+      "y": 1746.0
+    },
+    "rotation": -0.7178319959609496,
+    "SHAPE_TYPE": "cs355.model.drawing.Rectangle"
+  },
+  {
+    "width": 56.0,
+    "height": 35.0,
+    "color": {
+      "value": -1,
+      "falpha": 0.0
+    },
+    "center": {
+      "x": 694.0,
+      "y": 1032.5
+    },
+    "rotation": 0.6964030915287727,
+    "SHAPE_TYPE": "cs355.model.drawing.Rectangle"
+  },
+  {
+    "width": 212.0,
+    "height": 12.0,
+    "color": {
+      "value": -1,
+      "falpha": 0.0
+    },
+    "center": {
+      "x": 738.0,
+      "y": 1138.0
+    },
+    "rotation": -0.714090698612158,
+    "SHAPE_TYPE": "cs355.model.drawing.Rectangle"
   }
 ]
