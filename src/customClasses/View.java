@@ -33,12 +33,12 @@ public class View implements ViewRefresher {
 		Shape curShape = null;
 		for (int i = 0; i < model.getShapes().size(); i++) {
 			cs355.model.drawing.Shape shape = model.getShape(i);
+			AffineTransform aT = objToView(shape);
+			g2d.setTransform(aT);
+			g2d.setColor(shape.getColor());
 			boolean curSelect = (model.getShapeIndex() == i);
 			if(shape instanceof Line){
 				Line line = (Line)shape; 
-				AffineTransform aT = objToView(shape);
-				g2d.setTransform(aT);
-				g2d.setColor(shape.getColor());
 				g2d.drawLine((int)line.getStart().getX(), (int)line.getStart().getY(), (int)line.getEnd().getX(), (int)line.getEnd().getY());
 				if(curSelect){
 					curShape = shape;
@@ -47,9 +47,6 @@ public class View implements ViewRefresher {
 			}
 			else if(shape instanceof Ellipse){
 				Ellipse ellipse = (Ellipse) shape;
-				AffineTransform aT = objToView(shape);
-				g2d.setTransform(aT);
-				g2d.setColor(ellipse.getColor());
 				g2d.fillOval((int)(0 - ellipse.getWidth()/2), (int)(0 - ellipse.getHeight()/2), (int)ellipse.getWidth(), (int)ellipse.getHeight());
 				if(curSelect){
 					curShape = shape;
@@ -58,9 +55,6 @@ public class View implements ViewRefresher {
 			}
 			else if(shape instanceof Circle){
 				Circle circle = (Circle) shape;
-				AffineTransform aT = objToView(shape);
-				g2d.setTransform(aT);
-				g2d.setColor(circle.getColor());
 				g2d.fillOval((int)(0-circle.getRadius()/2), (int)(0-circle.getRadius()/2), (int)circle.getRadius(), (int)circle.getRadius());
 				if(curSelect){
 					curShape = shape;
@@ -72,9 +66,6 @@ public class View implements ViewRefresher {
 				java.awt.geom.Point2D.Double UL = new java.awt.geom.Point2D.Double(0-(rect.getWidth()/2), 0-(rect.getHeight()/2));
 				int[] xPoints = {(int)UL.getX(), (int)(UL.getX() + rect.getWidth()), (int)(UL.getX() + rect.getWidth()), (int)UL.getX()};
 				int[] yPoints = {(int)UL.getY(), (int)UL.getY(), (int)(UL.getY() + rect.getHeight()), (int)(UL.getY() + rect.getHeight())};
-				AffineTransform aT = objToView(shape);
-				g2d.setTransform(aT);
-				g2d.setColor(rect.getColor());
 				g2d.fillPolygon(xPoints, yPoints, 4);
 				if(curSelect){
 					curShape = shape;
@@ -86,9 +77,6 @@ public class View implements ViewRefresher {
 				java.awt.geom.Point2D.Double UL = new java.awt.geom.Point2D.Double(0-(square.getSize()/2), 0-(square.getSize()/2));
 				int[] xPoints = {(int)UL.getX(), (int)(UL.getX() + square.getSize()),(int)(UL.getX() + square.getSize()), (int)UL.getX()};
 				int[] yPoints = {(int)UL.getY(), (int)UL.getY(), (int)(UL.getY() + square.getSize()), (int)(UL.getY() + square.getSize())};
-				AffineTransform aT = objToView(shape);
-				g2d.setTransform(aT);
-				g2d.setColor(square.getColor());
 				g2d.fillPolygon(xPoints, yPoints, 4);
 				if(curSelect){
 					curShape = shape;
@@ -99,9 +87,6 @@ public class View implements ViewRefresher {
 				Triangle tri = (Triangle) shape;
 				int[] xPoints = {(int)(tri.getA().getX()), (int)(tri.getB().getX()), (int)(tri.getC().getX())};
 				int[] yPoints = {(int)(tri.getA().getY()), (int)(tri.getB().getY()), (int)(tri.getC().getY())};
-				AffineTransform aT = objToView(shape);
-				g2d.setTransform(aT);
-				g2d.setColor(tri.getColor());
 				g2d.fillPolygon(xPoints, yPoints, 3);
 				if(curSelect){
 					curShape = shape;
