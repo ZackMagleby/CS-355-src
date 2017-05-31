@@ -604,6 +604,8 @@ public class Controller implements CS355Controller {
 	public void doDeleteShape() {
 		if(curShape != null){
 			model.deleteShape(curShapeIndex);
+			curShape = null;
+			curShapeIndex = -1;
 			model.updateAll();
 		}
 

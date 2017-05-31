@@ -36,6 +36,7 @@ public class Model extends CS355Drawing{
 	@Override
 	public void deleteShape(int index) {
 		shapeList.remove(index);
+		curShapeIndex = -1;
 	}
 
 	@Override
