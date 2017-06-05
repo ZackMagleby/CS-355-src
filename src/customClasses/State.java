@@ -11,7 +11,8 @@ public enum State {
 	   TRIANGLE2(8),
 	   TRIANGLE3(9),
 	   SELECT(10),
-	   ROTATE(11);
+	   ROTATE(11),
+	   THREED(12);
 	
 	   private int value;
 	   

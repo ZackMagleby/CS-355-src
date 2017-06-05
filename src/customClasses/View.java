@@ -1,11 +1,25 @@
 package customClasses;
 
+import static org.lwjgl.opengl.GL11.GL_LINES;
+import static org.lwjgl.opengl.GL11.glBegin;
+import static org.lwjgl.opengl.GL11.glColor3f;
+import static org.lwjgl.opengl.GL11.glEnd;
+import static org.lwjgl.opengl.GL11.glRotated;
+import static org.lwjgl.opengl.GL11.glVertex3d;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.Iterator;
 import java.util.Observable;
+
+import cs355.LWJGL.Line3D;
+import cs355.LWJGL.HouseModel;
+import cs355.LWJGL.WireFrame;
+
 import java.awt.geom.AffineTransform;
 
 import cs355.GUIFunctions;
+import cs355.LWJGL.Point3D;
 import cs355.model.drawing.*;
 import cs355.view.ViewRefresher;
 
@@ -14,11 +28,20 @@ public class View implements ViewRefresher {
 	Model model;
 	java.awt.geom.Point2D.Double viewPort;
 	double zoom;
+	
+	boolean ThreeD;
+	Point3D camera;
+	double rotation;
+	int farPlane = 1000;
+	int nearPlane = 0;
+	final double fov = 90.0;
+	private WireFrame wireModel = new HouseModel();
 
 	public View(Model uploadModel){
 		model = uploadModel;
 		viewPort = new java.awt.geom.Point2D.Double(0, 0);
 		zoom = 1;
+		ThreeD = false;
 	}
 	
 	@Override
@@ -28,6 +51,10 @@ public class View implements ViewRefresher {
 
 	@Override
 	public void refreshView(Graphics2D g2d){
+		if(ThreeD){
+			draw3d(g2d);
+			return;
+		}
 		Color curColor = Color.WHITE;
 		String outlineType = null;
 		Shape curShape = null;
@@ -159,6 +186,40 @@ public class View implements ViewRefresher {
 
 	}
 
+	private void draw3d(Graphics2D g2d) {
+    	glBegin(GL_LINES);
+    	int shift = 0;
+    	int otherSide = 0;
+    	AffineTransform objToWorld = new AffineTransform();
+    	//objToWorld.concatenate(new AffineTransform(1, 0, 0, 0, 1, 0, 0, 0, 1, camera.x, camera.y, camera.z));
+    	for(int i = 0; i<=5; i++){
+    		//float[] curColor = colors[i];
+	    	Iterator<Line3D> lines = wireModel.getLines();
+	    	
+	    	//glColor3f(curColor[0], curColor[1], curColor[2]);
+	    	
+	    	if(i==3){
+	    		otherSide = 30;
+	    		shift = 0;
+	    		glRotated(180, 0, 1, 0);
+	    	}
+    		while(lines.hasNext()){
+    			Line3D line = lines.next();
+    			Point3D start = line.start;
+    			Point3D end = line.end;
+    			
+    			
+    			glVertex3d(start.x + shift, start.y, start.z + otherSide);
+    			glVertex3d(end.x + shift, end.y, end.z + otherSide);
+    		}		
+	    	shift += 15;
+	    	//otherSide += otherSide;
+    	}
+    	
+    	glEnd();
+		
+	}
+
 	public void setView(java.awt.geom.Point2D.Double newView){
 		viewPort = newView;
 	}
@@ -176,4 +237,15 @@ public class View implements ViewRefresher {
 		return aT;
 	}
 
+	public void toggleThreeD(){
+		ThreeD = !ThreeD;
+	}
+	
+	public void setCamera(Point3D newCam){
+		camera = newCam;
+	}
+	
+	public void setRotation(double newRot){
+		rotation = newRot;
+	}
 }

@@ -1,8 +1,15 @@
 package customClasses;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.awt.Color;
 import java.util.List;
+
+import cs355.LWJGL.Point3D;
+
 import java.util.Iterator;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
@@ -33,6 +40,9 @@ public class Controller implements CS355Controller {
 	boolean lineEndEdit;
 	int curShapeIndex;
 	double zoom;
+	
+	Point3D cameraPos = new Point3D(0, -2.5, -10);
+	Double rotation = 0.0;
 	
 	public Controller(Model uploadModel, View uploadView){
 		controllorColor = Color.WHITE;
@@ -396,6 +406,9 @@ public class Controller implements CS355Controller {
 
 	@Override
 	public void lineButtonHit() {
+		if(curState == State.THREED){
+			return;
+		}
 		curState = State.LINE;
 		curShape = null;
 		curShapeIndex = -1;
@@ -405,6 +418,9 @@ public class Controller implements CS355Controller {
 
 	@Override
 	public void squareButtonHit() {
+		if(curState == State.THREED){
+			return;
+		}
 		curState = State.SQUARE;
 		curShape = null;
 		curShapeIndex = -1;
@@ -414,6 +430,9 @@ public class Controller implements CS355Controller {
 
 	@Override
 	public void rectangleButtonHit() {
+		if(curState == State.THREED){
+			return;
+		}
 		curState = State.RECTANGLE;
 		curShape = null;
 		curShapeIndex = -1;
@@ -423,6 +442,9 @@ public class Controller implements CS355Controller {
 
 	@Override
 	public void circleButtonHit() {
+		if(curState == State.THREED){
+			return;
+		}
 		curState = State.CIRCLE;
 		curShape = null;
 		curShapeIndex = -1;
@@ -432,6 +454,9 @@ public class Controller implements CS355Controller {
 
 	@Override
 	public void ellipseButtonHit() {
+		if(curState == State.THREED){
+			return;
+		}
 		curState = State.ELLIPSE;
 		curShape = null;
 		curShapeIndex = -1;
@@ -441,6 +466,9 @@ public class Controller implements CS355Controller {
 
 	@Override
 	public void triangleButtonHit() {
+		if(curState == State.THREED){
+			return;
+		}
 		curState = State.TRIANGLE1;
 		curShape = null;
 		curShapeIndex = -1;
@@ -451,6 +479,9 @@ public class Controller implements CS355Controller {
 
 	@Override
 	public void selectButtonHit() {
+		if(curState == State.THREED){
+			return;
+		}
 		curState = State.SELECT;
 		curShape = null;
 		curShapeIndex = -1;
@@ -554,20 +585,102 @@ public class Controller implements CS355Controller {
 
 	@Override
 	public void openScene(File file) {
-		// TODO Auto-generated method stub
-
+		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+		    String line;
+		    while ((line = br.readLine()) != null) {
+		       System.out.println(line);
+		    }
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void toggle3DModelDisplay() {
-		// TODO Auto-generated method stub
-
+		curState = State.THREED;
+		view.toggleThreeD();
+		curShape = null;
+		curShapeIndex = -1;
+		model.setShapeIndex(-1);
+		model.updateAll();
 	}
 
 	@Override
 	public void keyPressed(Iterator<Integer> iterator) {
-		// TODO Auto-generated method stub
-
+		if(curState != State.THREED){
+			return;
+		}
+		while(iterator.hasNext()){
+			int key = iterator.next();
+			System.out.println((char)key);
+	        if((char)key == 'W') 
+	        {
+	            //System.out.println("You are pressing W!");
+	            cameraPos.z += Math.cos(Math.toRadians(rotation))/5;
+	            cameraPos.x -= Math.sin(Math.toRadians(rotation))/5;
+	        }
+	        else if((char)key == 'S') 
+	        {
+	            //System.out.println("You are pressing S!");
+	        	cameraPos.z -= Math.cos(Math.toRadians(rotation))/5;
+	            cameraPos.x += Math.sin(Math.toRadians(rotation))/5;
+	        }
+	        else if((char)key == 'A') 
+	        {
+	            //System.out.println("You are pressing A!");
+	        	cameraPos.z -= Math.cos(Math.toRadians(rotation+90))/5 ;
+	            cameraPos.x += Math.sin(Math.toRadians(rotation+90))/5 ;
+	        }
+	        else if((char)key == 'D') 
+	        {
+	            //System.out.println("You are pressing D!");
+	        	cameraPos.z += Math.cos(Math.toRadians(rotation+90))/5 ;
+	            cameraPos.x -= Math.sin(Math.toRadians(rotation+90))/5 ;
+	        }
+	        else if((char)key == 'Q') 
+	        {
+	            //System.out.println("You are pressing Q!");
+	            rotation -= 1;
+	        }
+	        else if((char)key == 'E') 
+	        {
+	            //System.out.println("You are pressing E!");
+	            rotation += 1;
+	        }
+	        else if((char)key == 'R') 
+	        {
+	            //System.out.println("You are pressing R!");
+	            cameraPos.y -= .1;
+	        }
+	        else if((char)key == 'F') 
+	        {
+	            //System.out.println("You are pressing F!");
+	            cameraPos.y += .1;
+	        }
+//	        else if((char)key == 'P') 
+//	        {
+//	           //System.out.println("You are pressing P!");
+//	           mode = 1;
+//	        }
+//	        else if((char)key == 'O') 
+//	        {
+//	           //System.out.println("You are pressing O!");
+//	           mode = 0;
+//	        }
+	        else if((char)key == 'H') 
+	        {
+	        	//System.out.println("You are pressing H!");
+	        	cameraPos = new Point3D(0, -2.5, -10);
+	        	//rotation = 0.0;
+	        }
+		}
+		view.setCamera(cameraPos);
+		view.setRotation(rotation);
+		model.updateAll();
 	}
 
 	@Override
@@ -591,7 +704,6 @@ public class Controller implements CS355Controller {
 	@Override
 	public void saveDrawing(File file) {
 		model.save(file);
-
 	}
 
 	@Override
@@ -604,8 +716,6 @@ public class Controller implements CS355Controller {
 	public void doDeleteShape() {
 		if(curShape != null){
 			model.deleteShape(curShapeIndex);
-			curShape = null;
-			curShapeIndex = -1;
 			model.updateAll();
 		}
 
