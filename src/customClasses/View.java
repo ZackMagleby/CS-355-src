@@ -42,6 +42,7 @@ public class View implements ViewRefresher {
 		viewPort = new java.awt.geom.Point2D.Double(0, 0);
 		zoom = 1;
 		ThreeD = false;
+		camera = new Point3D(0, -2.5, -10);
 	}
 	
 	@Override
@@ -187,37 +188,61 @@ public class View implements ViewRefresher {
 	}
 
 	private void draw3d(Graphics2D g2d) {
-    	glBegin(GL_LINES);
-    	int shift = 0;
-    	int otherSide = 0;
-    	AffineTransform objToWorld = new AffineTransform();
-    	//objToWorld.concatenate(new AffineTransform(1, 0, 0, 0, 1, 0, 0, 0, 1, camera.x, camera.y, camera.z));
-    	for(int i = 0; i<=5; i++){
-    		//float[] curColor = colors[i];
-	    	Iterator<Line3D> lines = wireModel.getLines();
+	    	double[][] transformMatrix = {
+	    			{1,0,0,-camera.x},
+	    			{0,1,0,-camera.y},
+	    			{0,0,1,-camera.z},
+	    			{0,0,0,1}};
 	    	
-	    	//glColor3f(curColor[0], curColor[1], curColor[2]);
+	    	double[][] rotationMatrix = {
+	    			{Math.cos(rotation),0,Math.sin(rotation),0},
+	    			{0,1,0,0},
+	    			{-Math.sin(rotation),0,Math.cos(rotation),0},
+	    			{0,0,0,1}};
 	    	
-	    	if(i==3){
-	    		otherSide = 30;
-	    		shift = 0;
-	    		glRotated(180, 0, 1, 0);
-	    	}
+	    	double[][] worldToCamera = multiplyMat(rotationMatrix, transformMatrix);
+	    	
+	    	double zoomY = 1/Math.tan(fov/2);
+	    	double zoomX = (3*zoomY)/4;
+	    	double clip1 = (farPlane+nearPlane)/(farPlane-nearPlane);
+	    	double clip2 = (farPlane*nearPlane*-2)/(farPlane-nearPlane);
+	    	
+	    	double[][] clipMatrix = {
+	    			{zoomX,0,0,0},
+	    			{0,zoomY,0,0},
+	    			{0,0,clip1,clip2},
+	    			{0,0,1,0}};
+	    	
+	    	double[][] worldToClip = multiplyMat(clipMatrix, worldToCamera);
+	    	
+			Iterator<Line3D> lines = wireModel.getLines();
     		while(lines.hasNext()){
     			Line3D line = lines.next();
-    			Point3D start = line.start;
-    			Point3D end = line.end;
+    			double[] startMatrix = {
+    	    			line.start.x,line.start.y,line.start.z,1};
+    			double[] endMatrix = {
+    					line.end.x,line.end.y,line.end.z,1};
+    			
+    			double[] startClip = matrixVec4(worldToClip,startMatrix);
+    			double[] endClip = matrixVec4(worldToClip,endMatrix);
+    			
+    			double[] normalStart = {startClip[0]/startClip[3], startClip[1]/startClip[3], startClip[2]/startClip[3], 1};
+    			double[] normalEnd = {endClip[0]/endClip[3], endClip[1]/endClip[3], endClip[2]/endClip[3], 1};
     			
     			
-    			glVertex3d(start.x + shift, start.y, start.z + otherSide);
-    			glVertex3d(end.x + shift, end.y, end.z + otherSide);
+    			double[] prepStartForScreen = {normalStart[0], normalStart[1], 1};
+    			double[] prepEndForScreen = {normalEnd[0], normalEnd[1], 1};
+    			
+    			double[][] screenMatrix = {
+    					{320, 0, 320},
+    					{0, -240, 240},
+    					{0, 0, 1}};
+    			
+    			double[] screenStart = matrixVec3(screenMatrix, prepStartForScreen);
+    			double[] screenEnd = matrixVec3(screenMatrix, prepEndForScreen);
+    			
+    			g2d.drawLine((int)screenStart[0], (int)screenStart[1], (int)screenEnd[0], (int)screenEnd[1]);
     		}		
-	    	shift += 15;
-	    	//otherSide += otherSide;
-    	}
-    	
-    	glEnd();
-		
 	}
 
 	public void setView(java.awt.geom.Point2D.Double newView){
@@ -247,5 +272,37 @@ public class View implements ViewRefresher {
 	
 	public void setRotation(double newRot){
 		rotation = newRot;
+	}
+	
+	public double[][] multiplyMat(double[][] A, double[][] B){
+		double[][] C = new double[4][4];
+		for (int i = 0; i < 4; i++){
+			for (int j = 0; j < 4; j++){
+				for (int k = 0; k < 4; k++){
+					C[i][j] += A[i][k] * B[k][j];
+				}
+			}
+		}
+		return C;	
+	}
+	
+	public double[] matrixVec4(double[][] A, double[] B){
+		double[] C = new double[4];
+		for (int i = 0; i < 4; i++){
+			for (int j = 0; j < 4; j++){
+					C[i] += A[i][j] * B[j];
+			}
+		}
+		return C;
+	}
+	
+	public double[] matrixVec3(double[][] A, double[] B){
+		double[] C = new double[3];
+		for (int i = 0; i < 3; i++){
+			for (int j = 0; j < 3; j++){
+					C[i] += A[i][j] * B[j];
+			}
+		}
+		return C;
 	}
 }

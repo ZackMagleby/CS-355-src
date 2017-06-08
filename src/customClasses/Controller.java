@@ -644,12 +644,12 @@ public class Controller implements CS355Controller {
 	        else if((char)key == 'Q') 
 	        {
 	            //System.out.println("You are pressing Q!");
-	            rotation -= 1;
+	            rotation -= 0.1;
 	        }
 	        else if((char)key == 'E') 
 	        {
 	            //System.out.println("You are pressing E!");
-	            rotation += 1;
+	            rotation += 0.1;
 	        }
 	        else if((char)key == 'R') 
 	        {
