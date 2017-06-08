@@ -230,6 +230,7 @@ public class View implements ViewRefresher {
     			double[] normalEnd = {endClip[0]/endClip[3], endClip[1]/endClip[3], endClip[2]/endClip[3], 1};
     			
     			
+    			
     			double[] prepStartForScreen = {normalStart[0], normalStart[1], 1};
     			double[] prepEndForScreen = {normalEnd[0], normalEnd[1], 1};
     			

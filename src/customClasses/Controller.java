@@ -632,14 +632,14 @@ public class Controller implements CS355Controller {
 	        else if((char)key == 'A') 
 	        {
 	            //System.out.println("You are pressing A!");
-	        	cameraPos.z -= Math.cos(Math.toRadians(rotation+90))/5 ;
-	            cameraPos.x += Math.sin(Math.toRadians(rotation+90))/5 ;
+	        	cameraPos.z += Math.cos(Math.toRadians(rotation+90))/5 ;
+	            cameraPos.x -= Math.sin(Math.toRadians(rotation+90))/5 ;
 	        }
 	        else if((char)key == 'D') 
 	        {
 	            //System.out.println("You are pressing D!");
-	        	cameraPos.z += Math.cos(Math.toRadians(rotation+90))/5 ;
-	            cameraPos.x -= Math.sin(Math.toRadians(rotation+90))/5 ;
+	        	cameraPos.z -= Math.cos(Math.toRadians(rotation+90))/5 ;
+	            cameraPos.x += Math.sin(Math.toRadians(rotation+90))/5 ;
 	        }
 	        else if((char)key == 'Q') 
 	        {
@@ -654,12 +654,12 @@ public class Controller implements CS355Controller {
 	        else if((char)key == 'R') 
 	        {
 	            //System.out.println("You are pressing R!");
-	            cameraPos.y -= .1;
+	            cameraPos.y += .1;
 	        }
 	        else if((char)key == 'F') 
 	        {
 	            //System.out.println("You are pressing F!");
-	            cameraPos.y += .1;
+	            cameraPos.y -= .1;
 	        }
 //	        else if((char)key == 'P') 
 //	        {
