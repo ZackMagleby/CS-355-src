@@ -603,6 +603,8 @@ public class Controller implements CS355Controller {
 	public void toggle3DModelDisplay() {
 		curState = State.THREED;
 		view.toggleThreeD();
+		view.setZoom(.25);
+		zoom = .25;
 		curShape = null;
 		curShapeIndex = -1;
 		model.setShapeIndex(-1);

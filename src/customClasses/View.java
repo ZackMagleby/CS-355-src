@@ -1,12 +1,5 @@
 package customClasses;
 
-import static org.lwjgl.opengl.GL11.GL_LINES;
-import static org.lwjgl.opengl.GL11.glBegin;
-import static org.lwjgl.opengl.GL11.glColor3f;
-import static org.lwjgl.opengl.GL11.glEnd;
-import static org.lwjgl.opengl.GL11.glRotated;
-import static org.lwjgl.opengl.GL11.glVertex3d;
-
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.Iterator;
@@ -229,7 +222,7 @@ public class View implements ViewRefresher {
     			double[] normalStart = {startClip[0]/startClip[3], startClip[1]/startClip[3], startClip[2]/startClip[3], 1};
     			double[] normalEnd = {endClip[0]/endClip[3], endClip[1]/endClip[3], endClip[2]/endClip[3], 1};
     			
-    			
+    			//check clipping laws and ordinances
     			
     			double[] prepStartForScreen = {normalStart[0], normalStart[1], 1};
     			double[] prepEndForScreen = {normalEnd[0], normalEnd[1], 1};
