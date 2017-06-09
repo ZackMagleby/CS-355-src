@@ -12,7 +12,7 @@ import cs355.LWJGL.WireFrame;
 import java.awt.geom.AffineTransform;
 
 import cs355.GUIFunctions;
-import cs355.LWJGL.Point3D;
+import cs355.model.scene.Point3D;
 import cs355.model.drawing.*;
 import cs355.view.ViewRefresher;
 
@@ -35,7 +35,7 @@ public class View implements ViewRefresher {
 		viewPort = new java.awt.geom.Point2D.Double(0, 0);
 		zoom = 1;
 		ThreeD = false;
-		camera = new Point3D(0, -2.5, -10);
+		camera = new Point3D(0, 2.5, -10);
 	}
 	
 	@Override
@@ -219,23 +219,22 @@ public class View implements ViewRefresher {
     			double[] startClip = matrixVec4(worldToClip,startMatrix);
     			double[] endClip = matrixVec4(worldToClip,endMatrix);
     			
-    			double[] normalStart = {startClip[0]/startClip[3], startClip[1]/startClip[3], startClip[2]/startClip[3], 1};
-    			double[] normalEnd = {endClip[0]/endClip[3], endClip[1]/endClip[3], endClip[2]/endClip[3], 1};
-    			
-    			//check clipping laws and ordinances
-    			
-    			double[] prepStartForScreen = {normalStart[0], normalStart[1], 1};
-    			double[] prepEndForScreen = {normalEnd[0], normalEnd[1], 1};
-    			
-    			double[][] screenMatrix = {
-    					{320, 0, 320},
-    					{0, -240, 240},
-    					{0, 0, 1}};
-    			
-    			double[] screenStart = matrixVec3(screenMatrix, prepStartForScreen);
-    			double[] screenEnd = matrixVec3(screenMatrix, prepEndForScreen);
-    			
-    			g2d.drawLine((int)screenStart[0], (int)screenStart[1], (int)screenEnd[0], (int)screenEnd[1]);
+    			if(clipCheck(startClip) && clipCheck(endClip)){    		    						
+	    			double[] normalStart = {startClip[0]/startClip[3], startClip[1]/startClip[3], startClip[2]/startClip[3], 1};
+	    			double[] normalEnd = {endClip[0]/endClip[3], endClip[1]/endClip[3], endClip[2]/endClip[3], 1};
+					double[] prepStartForScreen = {normalStart[0], normalStart[1], 1};
+					double[] prepEndForScreen = {normalEnd[0], normalEnd[1], 1};
+					
+					double[][] screenMatrix = { //Subject to change
+							{320, 0, 320},
+							{0, -240, 240},
+							{0, 0, 1}};
+					
+					double[] screenStart = matrixVec3(screenMatrix, prepStartForScreen);
+					double[] screenEnd = matrixVec3(screenMatrix, prepEndForScreen);
+					
+					g2d.drawLine((int)screenStart[0], (int)screenStart[1], (int)screenEnd[0], (int)screenEnd[1]);
+    			}
     		}		
 	}
 
@@ -298,5 +297,16 @@ public class View implements ViewRefresher {
 			}
 		}
 		return C;
+	}
+	
+	public boolean clipCheck(double[] A){
+		if(-A[3] <= A[0] && A[0] <= A[3]){
+			if(-A[3] <= A[1] && A[1] <= A[3]){
+				if(-A[3] <= A[2] && A[2] <= A[3]){
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }

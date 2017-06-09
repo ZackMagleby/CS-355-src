@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.awt.Color;
 import java.util.List;
 
-import cs355.LWJGL.Point3D;
+import cs355.model.scene.Point3D;
 
 import java.util.Iterator;
 import java.awt.event.MouseEvent;
@@ -16,6 +16,7 @@ import java.awt.geom.AffineTransform;
 
 import cs355.GUIFunctions;
 import cs355.model.drawing.*;
+import cs355.model.scene.CS355Scene;
 import cs355.controller.CS355Controller;
 
 public class Controller implements CS355Controller {
@@ -41,7 +42,7 @@ public class Controller implements CS355Controller {
 	int curShapeIndex;
 	double zoom;
 	
-	Point3D cameraPos = new Point3D(0, -2.5, -10);
+	Point3D cameraPos = new Point3D(0, 2.5, -10);
 	Double rotation = 0.0;
 	
 	public Controller(Model uploadModel, View uploadView){
@@ -585,18 +586,11 @@ public class Controller implements CS355Controller {
 
 	@Override
 	public void openScene(File file) {
-		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-		    String line;
-		    while ((line = br.readLine()) != null) {
-		       System.out.println(line);
-		    }
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		CS355Scene scene = new CS355Scene();
+		scene.open(file);
+		cameraPos = scene.getCameraPosition();
+		
+		model.updateAll();
 	}
 
 	@Override
