@@ -227,7 +227,7 @@ public class View implements ViewRefresher {
 	    				double[] prepStartForScreen = {normalStart[0], normalStart[1], 1};
 	    				double[] prepEndForScreen = {normalEnd[0], normalEnd[1], 1};
 	    				
-	    				double[][] screenMatrix = { //Subject to change
+	    				double[][] screenMatrix = {
 	    						{1024, 0, 1024},
 	    						{0, -1024, 1024},
 	    						{0, 0, 1}};
