@@ -1,10 +1,6 @@
 package customClasses;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.awt.Color;
 import java.util.List;
 
@@ -42,8 +38,8 @@ public class Controller implements CS355Controller {
 	int curShapeIndex;
 	double zoom;
 	
-	Point3D cameraPos = new Point3D(0, 2.5, -10);
-	Double rotation = 0.0;
+	Point3D cameraPos = new Point3D(-30, 2.5, -10);
+	Double rotation = (Math.PI);
 	
 	public Controller(Model uploadModel, View uploadView){
 		controllorColor = Color.WHITE;
@@ -263,7 +259,7 @@ public class Controller implements CS355Controller {
 		aT.transform(secondPoint, secondPoint);
 		if(curState == State.ROTATE){
 			
-			java.awt.geom.Point2D.Double u = new java.awt.geom.Point2D.Double(click.getX() - curShape.getCenter().getX(), click.getY() - curShape.getCenter().getY());
+			//java.awt.geom.Point2D.Double u = new java.awt.geom.Point2D.Double(click.getX() - curShape.getCenter().getX(), click.getY() - curShape.getCenter().getY());
 			java.awt.geom.Point2D.Double v = new java.awt.geom.Point2D.Double(secondPoint.getX() - curShape.getCenter().getX(), secondPoint.getY() - curShape.getCenter().getY());
 
 			double angle = Math.atan2(v.getY(), v.getX()) + Math.PI/2;// - Math.atan2(u.getY(), u.getX());
@@ -588,17 +584,28 @@ public class Controller implements CS355Controller {
 	public void openScene(File file) {
 		CS355Scene scene = new CS355Scene();
 		scene.open(file);
+		view.setScene(scene);
 		cameraPos = scene.getCameraPosition();
-		
+		view.setCamera(cameraPos);
+		view.setRotation(scene.getCameraRotation());
 		model.updateAll();
 	}
 
 	@Override
 	public void toggle3DModelDisplay() {
-		curState = State.THREED;
-		view.toggleThreeD();
-		view.setZoom(.25);
-		zoom = .25;
+		if(curState == State.THREED){
+			curState = State.SELECT;
+			view.toggleThreeD();
+		}
+		else{
+			curState = State.THREED;
+			view.toggleThreeD();
+			view.setZoom(.5);
+			zoom = .5;
+			zoomOutButtonHit();
+			view.setCamera(cameraPos);
+			view.setRotation(rotation);
+		}
 		curShape = null;
 		curShapeIndex = -1;
 		model.setShapeIndex(-1);
@@ -612,40 +619,40 @@ public class Controller implements CS355Controller {
 		}
 		while(iterator.hasNext()){
 			int key = iterator.next();
-			System.out.println((char)key);
+			//System.out.println((char)key);
 	        if((char)key == 'W') 
 	        {
 	            //System.out.println("You are pressing W!");
-	            cameraPos.z += Math.cos(Math.toRadians(rotation))/5;
-	            cameraPos.x -= Math.sin(Math.toRadians(rotation))/5;
+	            cameraPos.z += Math.cos(rotation)/5;
+	            cameraPos.x -= Math.sin(rotation)/5;
 	        }
 	        else if((char)key == 'S') 
 	        {
 	            //System.out.println("You are pressing S!");
-	        	cameraPos.z -= Math.cos(Math.toRadians(rotation))/5;
-	            cameraPos.x += Math.sin(Math.toRadians(rotation))/5;
+	        	cameraPos.z -= Math.cos(rotation)/5;
+	            cameraPos.x += Math.sin(rotation)/5;
 	        }
 	        else if((char)key == 'A') 
 	        {
 	            //System.out.println("You are pressing A!");
-	        	cameraPos.z += Math.cos(Math.toRadians(rotation+90))/5 ;
-	            cameraPos.x -= Math.sin(Math.toRadians(rotation+90))/5 ;
+	        	cameraPos.z += Math.cos(rotation+(Math.PI/2))/5 ;
+	            cameraPos.x -= Math.sin(rotation+(Math.PI/2))/5 ;
 	        }
 	        else if((char)key == 'D') 
 	        {
 	            //System.out.println("You are pressing D!");
-	        	cameraPos.z -= Math.cos(Math.toRadians(rotation+90))/5 ;
-	            cameraPos.x += Math.sin(Math.toRadians(rotation+90))/5 ;
+	        	cameraPos.z -= Math.cos(rotation+(Math.PI/2))/5 ;
+	            cameraPos.x += Math.sin(rotation+(Math.PI/2))/5 ;
 	        }
 	        else if((char)key == 'Q') 
 	        {
 	            //System.out.println("You are pressing Q!");
-	            rotation -= 0.1;
+	            rotation += 0.1;
 	        }
 	        else if((char)key == 'E') 
 	        {
 	            //System.out.println("You are pressing E!");
-	            rotation += 0.1;
+	            rotation -= 0.1;
 	        }
 	        else if((char)key == 'R') 
 	        {

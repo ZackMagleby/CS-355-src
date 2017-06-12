@@ -2,17 +2,15 @@ package customClasses;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Observable;
-
-import cs355.LWJGL.Line3D;
-import cs355.LWJGL.HouseModel;
-import cs355.LWJGL.WireFrame;
 
 import java.awt.geom.AffineTransform;
 
 import cs355.GUIFunctions;
+import cs355.model.scene.CS355Scene;
 import cs355.model.scene.Point3D;
+import cs355.model.scene.Line3D;
 import cs355.model.drawing.*;
 import cs355.view.ViewRefresher;
 
@@ -23,19 +21,18 @@ public class View implements ViewRefresher {
 	double zoom;
 	
 	boolean ThreeD;
-	Point3D camera;
-	double rotation;
+	Point3D camera = new Point3D(-30, 2.5, -10);
+	double rotation = (Math.PI);
 	int farPlane = 1000;
 	int nearPlane = 0;
 	final double fov = 90.0;
-	private WireFrame wireModel = new HouseModel();
+	CS355Scene scene = null;
 
 	public View(Model uploadModel){
 		model = uploadModel;
 		viewPort = new java.awt.geom.Point2D.Double(0, 0);
 		zoom = 1;
 		ThreeD = false;
-		camera = new Point3D(0, 2.5, -10);
 	}
 	
 	@Override
@@ -46,7 +43,9 @@ public class View implements ViewRefresher {
 	@Override
 	public void refreshView(Graphics2D g2d){
 		if(ThreeD){
-			draw3d(g2d);
+			if(scene != null){
+				draw3d(g2d);
+			}
 			return;
 		}
 		Color curColor = Color.WHITE;
@@ -208,34 +207,41 @@ public class View implements ViewRefresher {
 	    	
 	    	double[][] worldToClip = multiplyMat(clipMatrix, worldToCamera);
 	    	
-			Iterator<Line3D> lines = wireModel.getLines();
-    		while(lines.hasNext()){
-    			Line3D line = lines.next();
-    			double[] startMatrix = {
-    	    			line.start.x,line.start.y,line.start.z,1};
-    			double[] endMatrix = {
-    					line.end.x,line.end.y,line.end.z,1};
-    			
-    			double[] startClip = matrixVec4(worldToClip,startMatrix);
-    			double[] endClip = matrixVec4(worldToClip,endMatrix);
-    			
-    			if(clipCheck(startClip) && clipCheck(endClip)){    		    						
-	    			double[] normalStart = {startClip[0]/startClip[3], startClip[1]/startClip[3], startClip[2]/startClip[3], 1};
-	    			double[] normalEnd = {endClip[0]/endClip[3], endClip[1]/endClip[3], endClip[2]/endClip[3], 1};
-					double[] prepStartForScreen = {normalStart[0], normalStart[1], 1};
-					double[] prepEndForScreen = {normalEnd[0], normalEnd[1], 1};
-					
-					double[][] screenMatrix = { //Subject to change
-							{320, 0, 320},
-							{0, -240, 240},
-							{0, 0, 1}};
-					
-					double[] screenStart = matrixVec3(screenMatrix, prepStartForScreen);
-					double[] screenEnd = matrixVec3(screenMatrix, prepEndForScreen);
-					
-					g2d.drawLine((int)screenStart[0], (int)screenStart[1], (int)screenEnd[0], (int)screenEnd[1]);
-    			}
-    		}		
+	    	int size = scene.instances().size();
+	    	int shift = 0;
+	    	for(int i = 0; i < size; i++){
+	    		List<Line3D> lines = scene.instances().get(i).getModel().getLines();
+	    		for(int j = 0; j < lines.size(); j++){
+	    			Line3D line = lines.get(j);
+	    			double[] startMatrix = {
+	    					line.start.x + shift,line.start.y,line.start.z,1};
+	    			double[] endMatrix = {
+	    					line.end.x + shift,line.end.y,line.end.z,1};
+	    			
+	    			double[] startClip = matrixVec4(worldToClip,startMatrix);
+	    			double[] endClip = matrixVec4(worldToClip,endMatrix);
+	    			
+	    			if(clipCheck(startClip) && clipCheck(endClip)){    		    						
+	    				double[] normalStart = {startClip[0]/startClip[3], startClip[1]/startClip[3], startClip[2]/startClip[3], 1};
+	    				double[] normalEnd = {endClip[0]/endClip[3], endClip[1]/endClip[3], endClip[2]/endClip[3], 1};
+	    				double[] prepStartForScreen = {normalStart[0], normalStart[1], 1};
+	    				double[] prepEndForScreen = {normalEnd[0], normalEnd[1], 1};
+	    				
+	    				double[][] screenMatrix = { //Subject to change
+	    						{1024, 0, 1024},
+	    						{0, -1024, 1024},
+	    						{0, 0, 1}};
+	    				
+	    				double[] screenStart = matrixVec3(screenMatrix, prepStartForScreen);
+	    				double[] screenEnd = matrixVec3(screenMatrix, prepEndForScreen);
+	    				
+	    				AffineTransform affineTransform = worldToView();
+	    				g2d.setTransform(affineTransform);
+	    				g2d.drawLine((int)screenStart[0], (int)screenStart[1], (int)screenEnd[0], (int)screenEnd[1]);
+	    			}
+	    		}		
+	    		shift += 15;
+	    	}
 	}
 
 	public void setView(java.awt.geom.Point2D.Double newView){
@@ -254,6 +260,13 @@ public class View implements ViewRefresher {
 		aT.concatenate(new AffineTransform(Math.cos(curShape.getRotation()), Math.sin(curShape.getRotation()), -Math.sin(curShape.getRotation()), Math.cos(curShape.getRotation()), 0,0));
 		return aT;
 	}
+	
+	public AffineTransform worldToView(){
+		AffineTransform aT = new AffineTransform();
+		aT.concatenate(new AffineTransform(zoom,0,0,zoom,0,0));
+		aT.concatenate(new AffineTransform(1,0,0,1,-viewPort.getX(),-viewPort.getY()));
+		return aT;
+	}
 
 	public void toggleThreeD(){
 		ThreeD = !ThreeD;
@@ -265,6 +278,10 @@ public class View implements ViewRefresher {
 	
 	public void setRotation(double newRot){
 		rotation = newRot;
+	}
+	
+	public void setScene(CS355Scene newScene){
+		scene = newScene;
 	}
 	
 	public double[][] multiplyMat(double[][] A, double[][] B){

@@ -83,6 +83,7 @@ public class Model extends CS355Drawing{
 
 	@Override
 	public List<Shape> getShapesReversed() {
+		@SuppressWarnings("unchecked")
 		Vector<Shape> tempList = (Vector<Shape>) shapeList.clone(); 
 		Collections.reverse(tempList);
 		return tempList;
