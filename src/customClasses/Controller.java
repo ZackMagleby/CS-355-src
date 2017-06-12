@@ -587,13 +587,14 @@ public class Controller implements CS355Controller {
 		view.setScene(scene);
 		cameraPos = scene.getCameraPosition();
 		view.setCamera(cameraPos);
-		view.setRotation(scene.getCameraRotation());
+		rotation = scene.getCameraRotation() + (Math.PI);
+		view.setRotation(rotation);
 		model.updateAll();
 	}
 
 	@Override
 	public void toggle3DModelDisplay() {
-		if(curState == State.THREED){
+		if(curState == State.THREED){			
 			curState = State.SELECT;
 			view.toggleThreeD();
 		}
@@ -605,6 +606,7 @@ public class Controller implements CS355Controller {
 			zoomOutButtonHit();
 			view.setCamera(cameraPos);
 			view.setRotation(rotation);
+			GUIFunctions.printf("3D Mode Active");
 		}
 		curShape = null;
 		curShapeIndex = -1;
