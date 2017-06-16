@@ -12,6 +12,7 @@ import java.awt.geom.AffineTransform;
 
 import cs355.GUIFunctions;
 import cs355.model.drawing.*;
+import cs355.model.image.CS355Image;
 import cs355.model.scene.CS355Scene;
 import cs355.controller.CS355Controller;
 
@@ -690,8 +691,10 @@ public class Controller implements CS355Controller {
 
 	@Override
 	public void openImage(File file) {
-		// TODO Auto-generated method stub
-
+		CustomImage image = new CustomImage();
+		image.open(file);
+		view.setImage(image);
+		model.updateAll();
 	}
 
 	@Override
@@ -702,7 +705,21 @@ public class Controller implements CS355Controller {
 
 	@Override
 	public void toggleBackgroundDisplay() {
-		// TODO Auto-generated method stub
+		if(curState == State.IMAGE){			
+			curState = State.SELECT;
+			view.toggleImage();
+		}
+		else{
+			curState = State.IMAGE;
+			view.toggleImage();
+			view.setZoom(.5);
+			zoom = .5;
+			zoomOutButtonHit();
+		}
+		curShape = null;
+		curShapeIndex = -1;
+		model.setShapeIndex(-1);
+		model.updateAll();
 
 	}
 

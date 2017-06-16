@@ -2,10 +2,12 @@ package customClasses;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.util.List;
 import java.util.Observable;
 
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImageOp;
 
 import cs355.GUIFunctions;
 import cs355.model.scene.CS355Scene;
@@ -13,6 +15,7 @@ import cs355.model.scene.Point3D;
 import cs355.model.scene.Line3D;
 import cs355.model.drawing.*;
 import cs355.view.ViewRefresher;
+import sun.java2d.pipe.DrawImage;
 
 public class View implements ViewRefresher {
 	
@@ -25,14 +28,18 @@ public class View implements ViewRefresher {
 	double rotation = (Math.PI);
 	int farPlane = 1000;
 	int nearPlane = 0;
-	final double fov = 90.0;
+	final double fov = 45.0;
 	CS355Scene scene = null;
+	
+	CustomImage image = null;
+	boolean imageShow;
 
 	public View(Model uploadModel){
 		model = uploadModel;
 		viewPort = new java.awt.geom.Point2D.Double(0, 0);
 		zoom = 1;
 		ThreeD = false;
+		imageShow = false;
 	}
 	
 	@Override
@@ -45,6 +52,12 @@ public class View implements ViewRefresher {
 		if(ThreeD){
 			if(scene != null){
 				draw3d(g2d);
+			}
+			return;
+		}
+		if(imageShow){
+			if(image != null){
+				drawImage(g2d);
 			}
 			return;
 		}
@@ -179,6 +192,10 @@ public class View implements ViewRefresher {
 
 	}
 
+	private void drawImage(Graphics2D g2d) {
+		g2d.drawImage(image.getImage(), (BufferedImageOp) new AffineTransform(1f,0f,0f,1f,0,0), 0, 0);
+	}
+
 	private void draw3d(Graphics2D g2d) {
 	    	double[][] transformMatrix = {
 	    			{1,0,0,-camera.x},
@@ -272,6 +289,10 @@ public class View implements ViewRefresher {
 		ThreeD = !ThreeD;
 	}
 	
+	public void toggleImage(){
+		imageShow = !imageShow;
+	}
+	
 	public void setCamera(Point3D newCam){
 		camera = newCam;
 	}
@@ -282,6 +303,10 @@ public class View implements ViewRefresher {
 	
 	public void setScene(CS355Scene newScene){
 		scene = newScene;
+	}
+	
+	public void setImage(CustomImage newImage){
+		image = newImage;
 	}
 	
 	public double[][] multiplyMat(double[][] A, double[][] B){
