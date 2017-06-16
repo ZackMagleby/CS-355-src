@@ -195,7 +195,7 @@ public class View implements ViewRefresher {
 	private void drawImage(Graphics2D g2d) {
 		AffineTransform affineTransform = worldToView();
 		g2d.setTransform(affineTransform);
-		g2d.drawImage(image.getImage(), null, 100, 100);
+		g2d.drawImage(image.getImage(), null, 1024, 1024);
 	}
 
 	private void draw3d(Graphics2D g2d) {
