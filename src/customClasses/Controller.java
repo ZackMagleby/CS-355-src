@@ -42,6 +42,8 @@ public class Controller implements CS355Controller {
 	Point3D cameraPos = new Point3D(-30, 2.5, -10);
 	Double rotation = (Math.PI);
 	
+	CustomImage curImage = null;
+	
 	public Controller(Model uploadModel, View uploadView){
 		controllorColor = Color.WHITE;
 		model = uploadModel;
@@ -693,14 +695,15 @@ public class Controller implements CS355Controller {
 	public void openImage(File file) {
 		CustomImage image = new CustomImage();
 		image.open(file);
+		curImage = image;
 		view.setImage(image);
 		model.updateAll();
 	}
 
 	@Override
 	public void saveImage(File file) {
-		// TODO Auto-generated method stub
-
+		CustomImage image = curImage;
+		image.save(file);
 	}
 
 	@Override
@@ -710,6 +713,9 @@ public class Controller implements CS355Controller {
 			view.toggleImage();
 		}
 		else{
+			if(curState == State.THREED){
+				view.toggleThreeD();
+			}
 			curState = State.IMAGE;
 			view.toggleImage();
 			view.setZoom(.5);
