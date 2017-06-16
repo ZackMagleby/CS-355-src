@@ -702,8 +702,7 @@ public class Controller implements CS355Controller {
 
 	@Override
 	public void saveImage(File file) {
-		CustomImage image = curImage;
-		image.save(file);
+		curImage.save(file);
 	}
 
 	@Override
