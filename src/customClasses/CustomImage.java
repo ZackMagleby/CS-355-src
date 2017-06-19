@@ -27,12 +27,6 @@ public class CustomImage extends CS355Image {
 
 	@Override
 	public void edgeDetection() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void sharpen() {
 		int[] rgb = new int[3];
 		int[][][] temp = new int[this.getWidth()][this.getHeight()][3];
 		for(int i = 0; i<this.getWidth(); i++){
@@ -105,6 +99,104 @@ public class CustomImage extends CS355Image {
 					botLeft = getPixel(i+1, j-1, null);
 					botMid = getPixel(i+1, j, null);
 					botRight = getPixel(i+1, j+1, null);
+				}
+				double sobelXRed = ((topLeft[0]*-1)+(topRight[0]*1)+(left[0]*-2)+(right[0]*2)+(botLeft[0]*-1)+(botRight[0]*1))/8;
+				double sobelXGreen = ((topLeft[1]*-1)+(topRight[1]*1)+(left[1]*-2)+(right[1]*2)+(botLeft[1]*-1)+(botRight[1]*1))/8;
+				double sobelXBlue = ((topLeft[2]*-1)+(topRight[2]*1)+(left[2]*-1)+(right[2]*2)+(botLeft[2]*-1)+(botRight[2]*1))/8;
+				
+				double sobelYRed = ((topLeft[0]*-1)+(botLeft[0]*1)+(topMid[0]*-2)+(botMid[0]*2)+(topRight[0]*-1)+(botRight[0]*1))/8;
+				double sobelYGreen = ((topLeft[1]*-1)+(botLeft[1]*1)+(topMid[1]*-2)+(botMid[1]*2)+(topRight[1]*-1)+(botRight[1]*1))/8;
+				double sobelYBlue = ((topLeft[2]*-1)+(botLeft[2]*1)+(topMid[2]*-1)+(botMid[2]*2)+(topRight[2]*-1)+(botRight[2]*1))/8;
+				
+				double magRed = Math.sqrt(Math.pow(sobelXRed, 2) + Math.pow(sobelYRed, 2));
+				double magGreen = Math.sqrt(Math.pow(sobelXGreen, 2) + Math.pow(sobelYGreen, 2));
+				double magBlue = Math.sqrt(Math.pow(sobelXBlue, 2) + Math.pow(sobelYBlue, 2));
+				
+				int[] newColor = {(int)magRed, (int)magGreen, (int)magBlue};
+				temp[i][j] = newColor;
+			}
+		}
+		for(int i = 0; i<this.getWidth(); i++){
+			for(int j = 0; j<this.getHeight(); j++){
+				setPixel(i, j, temp[i][j]);				
+			}
+		}
+	}
+
+	@Override
+	public void sharpen() {
+		int[] rgb = new int[3];
+		int[][][] temp = new int[this.getWidth()][this.getHeight()][3];
+		for(int i = 0; i<this.getWidth(); i++){
+			for(int j = 0; j<this.getHeight(); j++){
+				getPixel(i, j, rgb);
+				
+				//int[] topLeft = {0,0,0};
+				int[] topMid = {0,0,0};
+				//int[] topRight = {0,0,0};
+				int[] left = {0,0,0};
+				int[] right = {0,0,0};
+				//int[] botLeft = {0,0,0};
+				int[] botMid = {0,0,0};
+				//int[] botRight = {0,0,0};
+				
+				if(i == 0 && j == 0){
+					right = getPixel(i, j+1, null);
+					botMid = getPixel(i+1, j, null);
+					//botRight = getPixel(i+1, j+1, null);
+				}
+				else if(i == 0 && j == this.getHeight()-1){
+					left = getPixel(i, j-1, null);
+					//botLeft = getPixel(i+1, j-1, null);
+					botMid = getPixel(i+1, j, null);
+				}
+				else if(i == this.getWidth()-1 && j == 0){
+					topMid = getPixel(i-1, j, null);
+					//topRight = getPixel(i-1, j+1, null);
+					right = getPixel(i, j+1, null);
+				}
+				else if(i == this.getWidth()-1 && j == this.getHeight()-1){
+					//topLeft = getPixel(i-1, j-1, null);
+					topMid = getPixel(i-1, j, null);
+					left = getPixel(i, j-1, null);
+				}
+				else if(j == 0){
+					topMid = getPixel(i-1, j, null);
+					//topRight = getPixel(i-1, j+1, null);
+					right = getPixel(i, j+1, null);
+					botMid = getPixel(i+1, j, null);
+					//botRight = getPixel(i+1, j+1, null);
+				}
+				else if(j == this.getHeight()-1){
+					//topLeft = getPixel(i-1, j-1, null);
+					topMid = getPixel(i-1, j, null);
+					left = getPixel(i, j-1, null);
+					//botLeft = getPixel(i+1, j-1, null);
+					botMid = getPixel(i+1, j, null);
+				}
+				else if(i == 0){
+					left = getPixel(i, j-1, null);
+					right = getPixel(i, j+1, null);
+					//botLeft = getPixel(i+1, j-1, null);
+					botMid = getPixel(i+1, j, null);
+					//botRight = getPixel(i+1, j+1, null);
+				}
+				else if(i == this.getWidth()-1){
+					//topLeft = getPixel(i-1, j-1, null);
+					topMid = getPixel(i-1, j, null);
+					//topRight = getPixel(i-1, j+1, null);
+					left = getPixel(i, j-1, null);
+					right = getPixel(i, j+1, null);
+				}
+				else{
+					//topLeft = getPixel(i-1, j-1, null);
+					topMid = getPixel(i-1, j, null);
+					//topRight = getPixel(i-1, j+1, null);
+					left = getPixel(i, j-1, null);
+					right = getPixel(i, j+1, null);
+					//botLeft = getPixel(i+1, j-1, null);
+					botMid = getPixel(i+1, j, null);
+					//botRight = getPixel(i+1, j+1, null);
 				}
 				int redValue = ((topMid[0]*-1)+(left[0]*-1)+(right[0]*-1)+(botMid[0]*-1)+(rgb[0]*6))/2;
 				int greenValue = ((topMid[1]*-1)+(left[1]*-1)+(right[1]*-1)+(botMid[1]*-1)+(rgb[1]*6))/2;
@@ -364,21 +456,14 @@ public class CustomImage extends CS355Image {
 	public void grayscale() {
 		int[] rgb = new int[3];
 		float[] hsb = new float[3];
-		// Do the following for each pixel:
 		for(int i = 0; i<this.getWidth(); i++){
 			for(int j = 0; j<this.getHeight(); j++){
-				// Get the color from the image.
 				getPixel(i, j, rgb);
-				// Convert to HSB.
-				Color.RGBtoHSB(rgb[0], rgb[1], rgb[2], hsb);
-				// Do whatever operation you’re supposed to do...
-				
-				// Convert back to RGB.
+				Color.RGBtoHSB(rgb[0], rgb[1], rgb[2], hsb);		
 				Color c = Color.getHSBColor(hsb[0], 0, hsb[2]);
 				rgb[0] = c.getRed();
 				rgb[1] = c.getGreen();
 				rgb[2] = c.getBlue();
-				// Set the pixel.
 				setPixel(i, j, rgb);				
 			}
 		}
@@ -388,24 +473,18 @@ public class CustomImage extends CS355Image {
 	public void contrast(int amount) {
 		int[] rgb = new int[3];
 		float[] hsb = new float[3];
-		// Do the following for each pixel:
 		for(int i = 0; i<this.getWidth(); i++){
 			for(int j = 0; j<this.getHeight(); j++){
-				// Get the color from the image.
 				getPixel(i, j, rgb);
-				// Convert to HSB.
-				double step1 = ((((double)amount)/100)+100)/100;
+				double step1 = (((double)amount)+100)/100;
 				double step2 = Math.pow(step1, 4);
 				Color.RGBtoHSB(rgb[0], rgb[1], rgb[2], hsb);
-				// Do whatever operation you’re supposed to do...
-				double step3 = step2 * (hsb[2] - 128);
-				double step4 = step3 + 128;
-				// Convert back to RGB.
+				double step3 = step2 * (hsb[2] - 0.5);
+				double step4 = step3 + 0.5;
 				Color c = Color.getHSBColor(hsb[0], hsb[1], (float)step4);
 				rgb[0] = c.getRed();
 				rgb[1] = c.getGreen();
 				rgb[2] = c.getBlue();
-				// Set the pixel.
 				setPixel(i, j, rgb);				
 			}
 		}
@@ -413,18 +492,13 @@ public class CustomImage extends CS355Image {
 
 	@Override
 	public void brightness(int amount) {
-		// Preallocate the arrays.
 		int[] rgb = new int[3];
 		float[] hsb = new float[3];
-		// Do the following for each pixel:
 		for(int i = 0; i<this.getWidth(); i++){
 			for(int j = 0; j<this.getHeight(); j++){
-				// Get the color from the image.
 				getPixel(i, j, rgb);
-				// Convert to HSB.
 				float convertedAmount = ((float)amount)/100;
 				Color.RGBtoHSB(rgb[0], rgb[1], rgb[2], hsb);
-				// Do whatever operation you’re supposed to do...
 				hsb[2] += convertedAmount;
 				float tempValue2 = hsb[2];
 				if(hsb[2] > 1){
@@ -433,12 +507,10 @@ public class CustomImage extends CS355Image {
 				if(hsb[2] < -1){
 					tempValue2 = -1;
 				}
-				// Convert back to RGB.
 				Color c = Color.getHSBColor(hsb[0], hsb[1], tempValue2);
 				rgb[0] = c.getRed();
 				rgb[1] = c.getGreen();
 				rgb[2] = c.getBlue();
-				// Set the pixel.
 				setPixel(i, j, rgb);				
 			}
 		}
