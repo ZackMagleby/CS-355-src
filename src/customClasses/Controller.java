@@ -747,49 +747,62 @@ public class Controller implements CS355Controller {
 			curShapeIndex = -1;
 			model.updateAll();
 		}
-
 	}
 
 	@Override
 	public void doEdgeDetection() {
-		// TODO Auto-generated method stub
-
+		if(curImage != null){
+			curImage.edgeDetection();
+		}
+		model.updateAll();
 	}
 
 	@Override
 	public void doSharpen() {
-		// TODO Auto-generated method stub
-
+		if(curImage != null){
+			curImage.sharpen();
+		}
+		model.updateAll();
 	}
 
 	@Override
 	public void doMedianBlur() {
-		// TODO Auto-generated method stub
-
+		if(curImage != null){
+			curImage.medianBlur();
+		}
+		model.updateAll();
 	}
 
 	@Override
 	public void doUniformBlur() {
-		// TODO Auto-generated method stub
-
+		if(curImage != null){
+			curImage.uniformBlur();
+		}
+		model.updateAll();
 	}
 
 	@Override
-	public void doGrayscale() {
-		// TODO Auto-generated method stub
-
+	public void doGrayscale() {		
+		if(curImage != null){
+			curImage.grayscale();
+		}
+		model.updateAll();
 	}
 
 	@Override
 	public void doChangeContrast(int contrastAmountNum) {
-		// TODO Auto-generated method stub
-
+		if(curImage != null){
+			curImage.contrast(contrastAmountNum);
+		}
+		model.updateAll();
 	}
 
 	@Override
 	public void doChangeBrightness(int brightnessAmountNum) {
-		// TODO Auto-generated method stub
-
+		if(curImage != null){
+			curImage.brightness(brightnessAmountNum);
+		}
+		model.updateAll();
 	}
 
 	@Override
