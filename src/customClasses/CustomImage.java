@@ -2,14 +2,9 @@ package customClasses;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.nio.Buffer;
 import java.util.Arrays;
 
-import com.sun.javafx.image.IntPixelAccessor;
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
-
 import cs355.model.image.CS355Image;
-import jdk.management.resource.internal.UnassignedContext;
 
 public class CustomImage extends CS355Image {
 
@@ -352,7 +347,6 @@ public class CustomImage extends CS355Image {
 				else if(maxDist == dist9){
 					colorToUse = botRight;
 				}
-				
 				temp[i][j] = colorToUse;
 			}
 		}
@@ -476,11 +470,17 @@ public class CustomImage extends CS355Image {
 		for(int i = 0; i<this.getWidth(); i++){
 			for(int j = 0; j<this.getHeight(); j++){
 				getPixel(i, j, rgb);
-				double step1 = (((double)amount)+100)/100;
+				double step1 = (((double)amount)+100.0)/100.0;
 				double step2 = Math.pow(step1, 4);
 				Color.RGBtoHSB(rgb[0], rgb[1], rgb[2], hsb);
 				double step3 = step2 * (hsb[2] - 0.5);
 				double step4 = step3 + 0.5;
+				if(step4 > 1){
+					step4 = 1;
+				}
+				if(step4 < 0){
+					step4 = 0;
+				}
 				Color c = Color.getHSBColor(hsb[0], hsb[1], (float)step4);
 				rgb[0] = c.getRed();
 				rgb[1] = c.getGreen();
@@ -504,8 +504,8 @@ public class CustomImage extends CS355Image {
 				if(hsb[2] > 1){
 					tempValue2 = 1;
 				}
-				if(hsb[2] < -1){
-					tempValue2 = -1;
+				if(hsb[2] < 0){
+					tempValue2 = 0;
 				}
 				Color c = Color.getHSBColor(hsb[0], hsb[1], tempValue2);
 				rgb[0] = c.getRed();
@@ -517,9 +517,9 @@ public class CustomImage extends CS355Image {
 	}
 	
 	private double distance(int[] start, int[] end){
-		double dis1 = Math.pow(start[0] + end[0], 2);
-		double dis2 = Math.pow(start[1] + end[1], 2);
-		double dis3 = Math.pow(start[2] + end[2], 2);
+		double dis1 = Math.pow(start[0] - end[0], 2);
+		double dis2 = Math.pow(start[1] - end[1], 2);
+		double dis3 = Math.pow(start[2] - end[2], 2);
 		return Math.sqrt(dis1 + dis2 + dis3);
 	}
 }

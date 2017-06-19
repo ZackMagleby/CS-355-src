@@ -227,15 +227,17 @@ public class View implements ViewRefresher {
 	    	double[][] worldToClip = multiplyMat(clipMatrix, worldToCamera);
 	    	
 	    	int size = scene.instances().size();
-	    	int shift = 0;
+	    	//int shift = 0;
 	    	for(int i = 0; i < size; i++){
+	    		g2d.setColor(scene.instances().get(i).getColor());
 	    		List<Line3D> lines = scene.instances().get(i).getModel().getLines();
 	    		for(int j = 0; j < lines.size(); j++){
+	    			Point3D shift = scene.instances().get(i).getPosition();
 	    			Line3D line = lines.get(j);
 	    			double[] startMatrix = {
-	    					line.start.x + shift,line.start.y,line.start.z,1};
+	    					line.start.x + shift.x,line.start.y + shift.y,line.start.z + shift.z,1};
 	    			double[] endMatrix = {
-	    					line.end.x + shift,line.end.y,line.end.z,1};
+	    					line.end.x + shift.x,line.end.y + shift.y,line.end.z + shift.z,1};
 	    			
 	    			double[] startClip = matrixVec4(worldToClip,startMatrix);
 	    			double[] endClip = matrixVec4(worldToClip,endMatrix);
@@ -259,7 +261,7 @@ public class View implements ViewRefresher {
 	    				g2d.drawLine((int)screenStart[0], (int)screenStart[1], (int)screenEnd[0], (int)screenEnd[1]);
 	    			}
 	    		}		
-	    		shift += 15;
+	    		//shift += 15;
 	    	}
 	}
 
